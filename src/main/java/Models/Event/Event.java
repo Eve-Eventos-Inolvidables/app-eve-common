@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @MappedSuperclass
-@Table(name = "Events")
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Event extends Identificable {
 
     @ManyToOne

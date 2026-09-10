@@ -1,13 +1,14 @@
 package Models.Event;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,11 +19,19 @@ public class EventGroup extends Event {
     private LocalDate startDate;
 
     @Column( name = "end_date", nullable = false)
-    private LocalDate endtDate;
+    private LocalDate endDate;
 
     @Column( name = "front_page_link", nullable = false)
     private String frontPageLink;
 
     @Column( name = "banner_link", nullable = false)
     private String bannerLink;
+
+    @OneToMany(
+            mappedBy = "eventGroup",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<SimpleEvent> simpleEvents = new ArrayList<>();
 }
