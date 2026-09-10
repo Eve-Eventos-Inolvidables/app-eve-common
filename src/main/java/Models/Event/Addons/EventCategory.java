@@ -1,6 +1,6 @@
-package Models.Event;
+package Models.Event.Addons;
 
-import Models.Base.Identificable;
+import Models.Base.Archivable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table( name =  "Event Categories")
-public class EventCategory extends Identificable {
+public class EventCategory extends Archivable {
     @Column(name = "name", nullable = false, length = 100)
     private String name;
 }

@@ -9,9 +9,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @MappedSuperclass
-public abstract class Identificable {
-    @Id
-    @GeneratedValue( strategy = GenerationType.IDENTITY)
-    private Long id;
+public abstract class Archivable extends Identificable{
 
+    @Column( name = "is_archived")
+    private boolean isArchived;
 }

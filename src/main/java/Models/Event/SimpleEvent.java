@@ -1,5 +1,6 @@
 package Models.Event;
 
+import Models.Event.Sector.Sector;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -9,12 +10,14 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
 @Table(name = "Events")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class SimpleEvent extends Event{
     @Column( name = "date", nullable = false)
     private LocalDate date;
@@ -39,5 +42,12 @@ public class SimpleEvent extends Event{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn( name = "group_event_id")
     private EventGroup eventGroup;
+
+    @OneToMany(
+            mappedBy = "event",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<Sector> sectorList;
 
 }

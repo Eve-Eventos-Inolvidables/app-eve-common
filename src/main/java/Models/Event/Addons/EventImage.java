@@ -1,6 +1,7 @@
-package Models.Event;
+package Models.Event.Addons;
 
 import Models.Base.Identificable;
+import Models.Event.SimpleEvent;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
