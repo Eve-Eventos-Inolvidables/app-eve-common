@@ -30,8 +30,4 @@ spring:
     description: Proyecto de Sistemas Distribuidos
     secret: ${SECRET}
 
-    event:
-      min_tickets_per_person: 1
-      max_tickets_per_person: 10
-
 

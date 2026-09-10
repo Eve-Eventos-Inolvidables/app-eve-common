@@ -1,6 +1,7 @@
-package Models.Event;
+package Models.Event.Addons;
 
 import Models.Base.Identificable;
+import Models.Event.SimpleEvent;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,7 @@ public class EventImage extends Identificable {
 
     @ManyToOne
     @JoinColumn( name = "event_id")
-    private SimpleEvent event_id;
+    private SimpleEvent event;
 
     @ManyToOne
     @JoinColumn( name = "image_type_id")

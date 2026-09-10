@@ -1,6 +1,7 @@
 package Models.Event;
 
-import Models.Base.Identificable;
+import Models.Base.Archivable;
+import Models.Event.Addons.EventCategory;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,8 +13,7 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @MappedSuperclass
-@Table(name = "Events")
-public abstract class Event extends Identificable {
+public abstract class Event extends Archivable {
 
     @ManyToOne
     @JoinColumn(name = "category_id")

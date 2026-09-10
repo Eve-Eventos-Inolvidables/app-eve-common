@@ -1,6 +1,6 @@
-package Models.Event;
+package Models.Event.Addons;
 
-import Models.Base.Identificable;
+import Models.Base.Archivable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,8 +10,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table( name =  "Image Types")
-public class ImageType extends Identificable {
+@Table( name =  "Image_Types")
+public class ImageType extends Archivable {
     @Column(name = "name", nullable = false, length = 100)
     private String name;
 }
