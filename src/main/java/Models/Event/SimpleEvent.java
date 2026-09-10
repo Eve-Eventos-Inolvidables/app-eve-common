@@ -1,0 +1,41 @@
+package Models.Event;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@Entity
+@Table(name = "Events")
+public class SimpleEvent extends Event{
+    @Column( name = "date", nullable = false)
+    private LocalDate date;
+    @Column( name="kick_off_time",nullable = false)
+    private LocalTime kickOffTime;
+
+    @Column( name = "tickets_per_user_limit")
+    @Min(value = 1, message = "La cantidad mínima por persona es 1 ticket")
+//    @Max(value = 10, message = "La cantidad máxima por persona son 10 tickets" )
+    private int ticketsPerPersonLimit;
+
+    @Column(name="primary_color", nullable = false)
+    private String primaryColor;
+
+    @Column(name="secondary_color", nullable = false)
+    private String secondaryColor;
+
+    @Column(name ="maps_link")
+    private String mapsLink;
+
+    @ManyToOne
+    @JoinColumn( name = "group_event_id")
+    private EventGroup eventGroup;
+
+}
