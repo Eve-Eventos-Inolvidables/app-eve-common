@@ -13,7 +13,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Table(name = "Access_Points")
-@Inheritance(strategy = InheritanceType.JOINED)
+
 public class AccessPoint extends BelongToEvent {
     @ManyToOne
     @JoinColumn( name = "sector_id")

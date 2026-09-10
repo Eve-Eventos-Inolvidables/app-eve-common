@@ -18,7 +18,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @Table( name = "Sectors")
-@Inheritance(strategy = InheritanceType.JOINED)
+
 public class Sector extends BelongToEvent {
 
 

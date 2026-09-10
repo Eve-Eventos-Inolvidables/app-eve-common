@@ -1,8 +1,8 @@
 package Models.Event.Batch;
 
-import Models.Base.Archivable;
+
 import Models.Event.BelongToEvent;
-import Models.Event.SimpleEvent;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +16,6 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @Table( name = "Batches")
-@Inheritance(strategy = InheritanceType.JOINED)
 public class Batch extends BelongToEvent {
     @Column( name = "name",nullable = false,length = 100)
     private String name;

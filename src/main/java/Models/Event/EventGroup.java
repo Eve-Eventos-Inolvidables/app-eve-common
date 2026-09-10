@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
+
 import java.util.List;
 
 @Getter
@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "Event_Groups")
-@Inheritance(strategy = InheritanceType.JOINED)
+
 public class EventGroup extends Event {
     @Column( name = "start_date", nullable = false)
     private LocalDate startDate;
@@ -34,5 +34,5 @@ public class EventGroup extends Event {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private List<SimpleEvent> simpleEvents = new ArrayList<>();
+    private List<SimpleEvent> simpleEvents;
 }

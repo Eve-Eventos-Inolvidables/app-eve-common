@@ -17,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "Events")
-@Inheritance(strategy = InheritanceType.JOINED)
+
 public class SimpleEvent extends Event{
     @Column( name = "date", nullable = false)
     private LocalDate date;
@@ -39,7 +39,7 @@ public class SimpleEvent extends Event{
     @Column(name ="maps_link")
     private String mapsLink;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn( name = "group_event_id")
     private EventGroup eventGroup;
 

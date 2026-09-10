@@ -10,7 +10,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @MappedSuperclass
-@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class BelongToEvent extends Archivable {
     @ManyToOne
     @JoinColumn(name = "event_id")

@@ -9,6 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @MappedSuperclass
+@Inheritance( strategy = InheritanceType.JOINED)
 public abstract class Identificable {
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY)

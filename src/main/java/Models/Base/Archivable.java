@@ -9,8 +9,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @MappedSuperclass
-public abstract class Archivable extends Identificable{
+public abstract class Archivable extends Identificable {
 
     @Column( name = "is_archived")
-    private boolean isArchived;
+    private boolean archived;
 }

@@ -13,7 +13,6 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @MappedSuperclass
-@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Event extends Archivable {
 
     @ManyToOne

@@ -16,7 +16,7 @@ public class EventImage extends Identificable {
 
     @ManyToOne
     @JoinColumn( name = "event_id")
-    private SimpleEvent event_id;
+    private SimpleEvent event;
 
     @ManyToOne
     @JoinColumn( name = "image_type_id")

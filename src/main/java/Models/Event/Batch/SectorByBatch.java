@@ -13,7 +13,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Table( name = "Sectors_By_Batch")
-@Inheritance(strategy = InheritanceType.JOINED)
+
 public class SectorByBatch extends Archivable {
     @ManyToOne
     @JoinColumn( name = "sector_id")
@@ -28,7 +28,7 @@ public class SectorByBatch extends Archivable {
     private int price;
 
     @Column( name = "quantity",nullable = false)
-    @Min(value = 1,message = "La cantidad que ser mayor")
+    @Min(value = 1,message = "La cantidad tiene que ser mayor")
     private int quantity;
 
 
