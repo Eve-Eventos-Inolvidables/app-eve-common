@@ -22,12 +22,6 @@ public class EventGroup extends Event {
     @Column( name = "end_date", nullable = false)
     private LocalDate endDate;
 
-    @Column( name = "front_page_link", nullable = false)
-    private String frontPageLink;
-
-    @Column( name = "banner_link", nullable = false)
-    private String bannerLink;
-
     @OneToMany(
             mappedBy = "eventGroup",
             fetch = FetchType.LAZY,

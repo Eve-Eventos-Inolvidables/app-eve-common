@@ -29,12 +29,6 @@ public class Sector extends BelongToEvent {
     @Min(value = 1, message = "La capacidad tiene que ser mayor")
     private int capacity;
 
-    @OneToMany(
-            mappedBy = "sector",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    private List<AccessPoint> accessPointList;
 
     @OneToMany(
             mappedBy = "sector",
