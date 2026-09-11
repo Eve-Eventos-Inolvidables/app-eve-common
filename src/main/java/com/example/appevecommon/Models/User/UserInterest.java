@@ -8,11 +8,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "User_interests")
+@Table(name = "User_Interests")
 public class UserInterest extends Identificable {
 
     @NotNull
@@ -24,4 +26,9 @@ public class UserInterest extends Identificable {
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private EventCategory category;
+
+    @NotNull
+    @Column( name = "marked_at")
+    private LocalDate markedAt;
+
 }
