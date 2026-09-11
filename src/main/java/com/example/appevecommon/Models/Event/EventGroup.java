@@ -1,4 +1,4 @@
-package Models.Event;
+package com.example.appevecommon.Models.Event;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

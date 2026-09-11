@@ -1,6 +1,6 @@
-package Models.Event;
+package com.example.appevecommon.Models.Event;
 
-import Models.Base.Identificable;
+import com.example.appevecommon.Models.Base.Identificable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +12,6 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @MappedSuperclass
-@Table(name = "Events")
 public abstract class Event extends Identificable {
 
     @ManyToOne

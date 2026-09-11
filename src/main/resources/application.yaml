@@ -22,19 +22,15 @@
 #      anim id est laborum
 
 spring:
-  datasource:
-    url: ${DB_URL}
-      username: ${DB_USERNAME}
-      password: ${DB_PASSWORD}
   liquibase:
     change-log: classpath:db/changelog-master.xml
-  config:
-    import:
-      - optional:file:.env[.properties]
+#  config:
+#    import:
+#      - optional:file:.env[.properties]
   application:
     name: app-eve-common
     description: Proyecto de Sistemas Distribuidos
-    secret: ${SECRET}
+#    secret: ${SECRET}
 
     event:
       min_tickets_per_person: 1

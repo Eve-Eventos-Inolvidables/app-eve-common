@@ -1,6 +1,6 @@
-package Models.Event;
+package com.example.appevecommon.Models.Event;
 
-import Models.Base.Identificable;
+import com.example.appevecommon.Models.Base.Identificable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
