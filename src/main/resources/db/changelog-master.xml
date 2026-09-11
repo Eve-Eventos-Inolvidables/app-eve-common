@@ -1,0 +1,253 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="mrfabian (generated)" id="1789167978610-1">
+        <createTable tableName="buys">
+            <column name="date" type="time(0) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_archived" type="BOOLEAN"/>
+            <column name="total" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="event_id" type="BIGINT"/>
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="buys_pkey"/>
+            </column>
+            <column name="user_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="mrfabian (generated)" id="1789167978610-2">
+        <createTable tableName="events">
+            <column name="date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_archived" type="BOOLEAN"/>
+            <column name="kick_off_time" type="time(0) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tickets_per_user_limit" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="visible_start" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="category_id" type="BIGINT"/>
+            <column name="group_event_id" type="BIGINT"/>
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="events_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(125)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(1000)"/>
+            <column name="maps_link" type="VARCHAR(255)"/>
+            <column name="primary_color" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="secondary_color" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="mrfabian (generated)" id="1789167978610-3">
+        <createTable tableName="sectors_by_batch">
+            <column name="is_archived" type="BOOLEAN"/>
+            <column name="price" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="quantity" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="batch_id" type="BIGINT"/>
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="sectors_by_batch_pkey"/>
+            </column>
+            <column name="sector_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="mrfabian (generated)" id="1789167978610-4">
+        <createTable tableName="sectors">
+            <column name="capacity" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_archived" type="BOOLEAN"/>
+            <column name="event_id" type="BIGINT"/>
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="sectors_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="mrfabian (generated)" id="1789167978610-5">
+        <createTable tableName="roles">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="roles_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="mrfabian (generated)" id="1789167978610-6">
+        <createTable tableName="users">
+            <column name="is_archived" type="BOOLEAN"/>
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="users_pkey"/>
+            </column>
+            <column name="role_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(125)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(150)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="mrfabian (generated)" id="1789167978610-7">
+        <addUniqueConstraint columnNames="name" constraintName="roles_name_key" tableName="roles"/>
+    </changeSet>
+    <changeSet author="mrfabian (generated)" id="1789167978610-8">
+        <addUniqueConstraint columnNames="email" constraintName="users_email_key" tableName="users"/>
+    </changeSet>
+    <changeSet author="mrfabian (generated)" id="1789167978610-9">
+        <createTable tableName="batches">
+            <column name="end_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_archived" type="BOOLEAN"/>
+            <column name="start_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="event_id" type="BIGINT"/>
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="batches_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="mrfabian (generated)" id="1789167978610-10">
+        <createTable tableName="event_categories">
+            <column name="is_archived" type="BOOLEAN"/>
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="event_categories_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="mrfabian (generated)" id="1789167978610-11">
+        <createTable tableName="event_groups">
+            <column name="end_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_archived" type="BOOLEAN"/>
+            <column name="start_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="visible_start" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="category_id" type="BIGINT"/>
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="event_groups_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(125)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(1000)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="mrfabian (generated)" id="1789167978610-12">
+        <createTable tableName="event_managers">
+            <column name="event_id" type="BIGINT"/>
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="event_managers_pkey"/>
+            </column>
+            <column name="manager_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="mrfabian (generated)" id="1789167978610-13">
+        <createTable tableName="tickets">
+            <column name="buy_id" type="BIGINT"/>
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="tickets_pkey"/>
+            </column>
+            <column name="sectors_by_batch" type="BIGINT"/>
+            <column name="qr_token" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="mrfabian (generated)" id="1789167978610-14">
+        <createTable tableName="user_interests">
+            <column name="marked_at" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="category_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="user_interests_pkey"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="mrfabian (generated)" id="1789167978610-15">
+        <addForeignKeyConstraint baseColumnNames="event_id" baseTableName="event_managers" constraintName="fk3qpmoh3718t0498vaovw79wpo" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="events" validate="true"/>
+    </changeSet>
+    <changeSet author="mrfabian (generated)" id="1789167978610-16">
+        <addForeignKeyConstraint baseColumnNames="category_id" baseTableName="event_groups" constraintName="fk7g0gfqd6g9l5bc4j2h4p1q9f" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="event_categories" validate="true"/>
+    </changeSet>
+    <changeSet author="mrfabian (generated)" id="1789167978610-17">
+        <addForeignKeyConstraint baseColumnNames="event_id" baseTableName="sectors" constraintName="fk7trgh82pkdv3mguq38affnhx9" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="events" validate="true"/>
+    </changeSet>
+    <changeSet author="mrfabian (generated)" id="1789167978610-18">
+        <addForeignKeyConstraint baseColumnNames="sectors_by_batch" baseTableName="tickets" constraintName="fk979lrw1crpf3jqd512qpj9jay" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="sectors_by_batch" validate="true"/>
+    </changeSet>
+    <changeSet author="mrfabian (generated)" id="1789167978610-19">
+        <addForeignKeyConstraint baseColumnNames="sector_id" baseTableName="sectors_by_batch" constraintName="fkb81dkwnuey0c4u7whf4n2b3sb" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="sectors" validate="true"/>
+    </changeSet>
+    <changeSet author="mrfabian (generated)" id="1789167978610-20">
+        <addForeignKeyConstraint baseColumnNames="event_id" baseTableName="batches" constraintName="fkba96g1o4yluunjp975rg4rc46" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="events" validate="true"/>
+    </changeSet>
+    <changeSet author="mrfabian (generated)" id="1789167978610-21">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="buys" constraintName="fkbag8fyrc0b51cqaehmhi3837q" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users" validate="true"/>
+    </changeSet>
+    <changeSet author="mrfabian (generated)" id="1789167978610-22">
+        <addForeignKeyConstraint baseColumnNames="batch_id" baseTableName="sectors_by_batch" constraintName="fkdtktbfduo6ky0eoquyit1anbm" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="batches" validate="true"/>
+    </changeSet>
+    <changeSet author="mrfabian (generated)" id="1789167978610-23">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="user_interests" constraintName="fkdv9fflrh61wyuujfwx2yn1tb4" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users" validate="true"/>
+    </changeSet>
+    <changeSet author="mrfabian (generated)" id="1789167978610-24">
+        <addForeignKeyConstraint baseColumnNames="category_id" baseTableName="events" constraintName="fkjgwxobdeneisw8h3nlaa2fwax" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="event_categories" validate="true"/>
+    </changeSet>
+    <changeSet author="mrfabian (generated)" id="1789167978610-25">
+        <addForeignKeyConstraint baseColumnNames="manager_id" baseTableName="event_managers" constraintName="fknbnqqcctqoxpv632mvhf01xul" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users" validate="true"/>
+    </changeSet>
+    <changeSet author="mrfabian (generated)" id="1789167978610-26">
+        <addForeignKeyConstraint baseColumnNames="group_event_id" baseTableName="events" constraintName="fknnim0ksam9fyvbv8n9fi4csvh" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="event_groups" validate="true"/>
+    </changeSet>
+    <changeSet author="mrfabian (generated)" id="1789167978610-27">
+        <addForeignKeyConstraint baseColumnNames="event_id" baseTableName="buys" constraintName="fko3ayg25w85h2rs0c9gmi3geg0" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="events" validate="true"/>
+    </changeSet>
+    <changeSet author="mrfabian (generated)" id="1789167978610-28">
+        <addForeignKeyConstraint baseColumnNames="category_id" baseTableName="user_interests" constraintName="fko4war5usdj5ikwa5rr8g8ubtg" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="event_categories" validate="true"/>
+    </changeSet>
+    <changeSet author="mrfabian (generated)" id="1789167978610-29">
+        <addForeignKeyConstraint baseColumnNames="role_id" baseTableName="users" constraintName="fkp56c1712k691lhsyewcssf40f" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="roles" validate="true"/>
+    </changeSet>
+    <changeSet author="mrfabian (generated)" id="1789167978610-30">
+        <addForeignKeyConstraint baseColumnNames="buy_id" baseTableName="tickets" constraintName="fkqh8272g2b5swtkp1eprepffjy" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="buys" validate="true"/>
+    </changeSet>
+</databaseChangeLog>
