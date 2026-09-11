@@ -1,7 +1,7 @@
 package com.example.appevecommon.Models.Event.Batch;
 
 
-import Models.Event.BelongToEvent;
+import com.example.appevecommon.Models.Event.BelongToEvent;
 
 import jakarta.persistence.*;
 import lombok.Getter;

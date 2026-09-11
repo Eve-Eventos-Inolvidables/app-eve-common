@@ -1,7 +1,7 @@
 package com.example.appevecommon.Models.Event.Batch;
 
-import Models.Base.Archivable;
-import Models.Event.Sector.Sector;
+import com.example.appevecommon.Models.Base.Archivable;
+import com.example.appevecommon.Models.Event.Sector.Sector;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import lombok.Getter;

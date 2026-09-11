@@ -1,6 +1,6 @@
 package com.example.appevecommon.Models.Event;
 
-import Models.Event.Sector.Sector;
+import com.example.appevecommon.Models.Event.Sector.Sector;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;

@@ -1,13 +1,14 @@
 openapi: 3.0.3
 info:
-  title: BigoBooks Common DTOs - Events & Catalogs
-  version: 1.0.0
+  title: BigoBooks Common DTOs
+  version: 1.1.0
 
-paths: {} # No se definen endpoints, solo componentes de transferencia (DTOs)
+paths: {}
 
 components:
   schemas:
-    # 1. Base Identificable DTO (para reflejar la jerarquía base con ID)
+    # --- CLASES BASE ---
+
     IdentificableDto:
       type: object
       properties:
@@ -15,34 +16,28 @@ components:
           type: integer
           format: int64
 
-    # 2. Categoría de Evento DTO
-    EventCategoryDto:
+    ArchivableDto:
       allOf:
         - $ref: '#/components/schemas/IdentificableDto'
         - type: object
-          required:
-            - name
           properties:
-            name:
-              type: string
-              maxLength: 100
+            archived:
+              type: boolean
+              default: false
 
-    # 3. Tipo de Imagen DTO
-    ImageTypeDto:
+    BelongToEventDto:
       allOf:
-        - $ref: '#/components/schemas/IdentificableDto'
+        - $ref: '#/components/schemas/ArchivableDto'
         - type: object
-          required:
-            - name
           properties:
-            name:
-              type: string
-              maxLength: 100
+            eventId:
+              type: integer
+              format: int64
+              description: ID del evento asociado (SimpleEvent)
 
-    # 4. Evento Base DTO (Refleja la clase abstracta Event con herencia/composición)
     EventDto:
       allOf:
-        - $ref: '#/components/schemas/IdentificableDto'
+        - $ref: '#/components/schemas/ArchivableDto'
         - type: object
           required:
             - name
@@ -51,7 +46,7 @@ components:
             categoryId:
               type: integer
               format: int64
-              description: ID de la categoría asociada (EventCategory)
+              description: ID de la categoría (EventCategory)
             name:
               type: string
               maxLength: 125
@@ -62,29 +57,34 @@ components:
               type: string
               maxLength: 1000
 
-    # 5. Grupo de Eventos DTO (Hereda propiedades de EventDto)
+    # --- ENTIDADES CONCRETAS ---
+
+    EventCategoryDto:
+      allOf:
+        - $ref: '#/components/schemas/ArchivableDto'
+        - type: object
+          required:
+            - name
+          properties:
+            name:
+              type: string
+              maxLength: 100
+
     EventGroupDto:
       allOf:
         - $ref: '#/components/schemas/EventDto'
         - type: object
           required:
             - startDate
-            - endtDate
-            - frontPageLink
-            - bannerLink
+            - endDate
           properties:
             startDate:
               type: string
               format: date
-            endtDate:
+            endDate:
               type: string
               format: date
-            frontPageLink:
-              type: string
-            bannerLink:
-              type: string
 
-    # 6. Evento Simple DTO (Hereda propiedades de EventDto)
     SimpleEventDto:
       allOf:
         - $ref: '#/components/schemas/EventDto'
@@ -92,6 +92,7 @@ components:
           required:
             - date
             - kickOffTime
+            - ticketsPerPersonLimit
             - primaryColor
             - secondaryColor
           properties:
@@ -110,30 +111,62 @@ components:
               type: string
             mapsLink:
               type: string
-            groupEventId:
+            eventGroupId:
               type: integer
               format: int64
-              description: ID del grupo de eventos al que pertenece (EventGroup)
+              description: ID del grupo de eventos si pertenece a uno
 
-    # 7. Imagen de Evento DTO
-    EventImageDto:
+    SectorDto:
       allOf:
-        - $ref: '#/components/schemas/IdentificableDto'
+        - $ref: '#/components/schemas/BelongToEventDto'
         - type: object
           required:
             - name
-            - imageLink
+            - capacity
           properties:
-            eventId:
-              type: integer
-              format: int64
-              description: ID del evento simple asociado
-            imageTypeId:
-              type: integer
-              format: int64
-              description: ID del tipo de imagen asociado
             name:
               type: string
               maxLength: 100
-            imageLink:
+            capacity:
+              type: integer
+              minimum: 1
+
+    BatchDto:
+      allOf:
+        - $ref: '#/components/schemas/BelongToEventDto'
+        - type: object
+          required:
+            - name
+            - startDate
+            - endDate
+          properties:
+            name:
               type: string
+              maxLength: 100
+            startDate:
+              type: string
+              format: date
+            endDate:
+              type: string
+              format: date
+
+    SectorByBatchDto:
+      allOf:
+        - $ref: '#/components/schemas/ArchivableDto'
+        - type: object
+          required:
+            - price
+            - quantity
+          properties:
+            sectorId:
+              type: integer
+              format: int64
+            batchId:
+              type: integer
+              format: int64
+            price:
+              type: integer
+              minimum: 1
+            quantity:
+              type: integer
+              minimum: 1

@@ -1,6 +1,6 @@
 package com.example.appevecommon.Models.Event.Addons;
 
-import Models.Base.Archivable;
+import com.example.appevecommon.Models.Base.Archivable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
