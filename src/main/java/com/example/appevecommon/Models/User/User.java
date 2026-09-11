@@ -1,6 +1,7 @@
 package com.example.appevecommon.Models.User;
 
 import com.example.appevecommon.Models.Base.Archivable;
+import com.example.appevecommon.Models.Buy.Buy;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -8,6 +9,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -33,4 +36,9 @@ public class User extends Archivable {
     @NotBlank
     @Column(name = "password", nullable = false)
     private String password;
+
+    @OneToMany(
+            mappedBy = "user"
+    )
+    private List<Buy> buyList;
 }
