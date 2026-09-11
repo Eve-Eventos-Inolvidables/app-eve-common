@@ -1,4 +1,4 @@
-package Models.Event.Batch;
+package com.example.appevecommon.Models.Event.Batch;
 
 
 import Models.Event.BelongToEvent;
@@ -17,6 +17,8 @@ import java.util.List;
 @NoArgsConstructor
 @Table( name = "Batches")
 public class Batch extends BelongToEvent {
+    @Id
+    private Long id;
     @Column( name = "name",nullable = false,length = 100)
     private String name;
 

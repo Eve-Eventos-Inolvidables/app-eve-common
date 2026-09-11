@@ -1,4 +1,4 @@
-package Models.Event.Sector;
+package com.example.appevecommon.Models.Event.Sector;
 
 import Models.Base.Archivable;
 import Models.Base.Identificable;

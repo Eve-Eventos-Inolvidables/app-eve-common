@@ -1,4 +1,4 @@
-package Models.Event;
+package com.example.appevecommon.Models.Event;
 
 import Models.Base.Archivable;
 import jakarta.persistence.*;

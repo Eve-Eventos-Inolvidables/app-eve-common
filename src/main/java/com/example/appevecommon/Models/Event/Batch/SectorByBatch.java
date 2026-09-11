@@ -1,4 +1,4 @@
-package Models.Event.Batch;
+package com.example.appevecommon.Models.Event.Batch;
 
 import Models.Base.Archivable;
 import Models.Event.Sector.Sector;
