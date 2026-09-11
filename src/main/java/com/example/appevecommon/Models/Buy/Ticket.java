@@ -19,4 +19,8 @@ public class Ticket extends Identificable {
 
     @Column( name = "qr_token")
     private String qrToken;
+
+    @ManyToOne
+    @JoinColumn(name="buy_id")
+    private Buy buy;
 }

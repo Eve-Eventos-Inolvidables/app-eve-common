@@ -57,7 +57,7 @@ components:
               type: string
               maxLength: 1000
 
-    # --- ENTIDADES CONCRETAS ---
+    # --- ENTIDADES CONCRETAS EXISTENTES ---
 
     EventCategoryDto:
       allOf:
@@ -170,3 +170,104 @@ components:
             quantity:
               type: integer
               minimum: 1
+
+    # --- NUEVAS ENTIDADES (USUARIOS Y COMPRAS) ---
+
+    RoleDto:
+      allOf:
+        - $ref: '#/components/schemas/IdentificableDto'
+        - type: object
+          required:
+            - name
+          properties:
+            name:
+              type: string
+              maxLength: 50
+
+    UserDto:
+      allOf:
+        - $ref: '#/components/schemas/ArchivableDto'
+        - type: object
+          required:
+            - roleId
+            - name
+            - email
+          properties:
+            roleId:
+              type: integer
+              format: int64
+            name:
+              type: string
+              maxLength: 125
+            email:
+              type: string
+              format: email
+              maxLength: 150
+
+    BuyDto:
+      allOf:
+        - $ref: '#/components/schemas/BelongToEventDto'
+        - type: object
+          required:
+            - userId
+            - total
+            - date
+          properties:
+            userId:
+              type: integer
+              format: int64
+            total:
+              type: integer
+              minimum: 1
+            date:
+              type: string
+              example: "15:30:00"
+
+    TicketDto:
+      allOf:
+        - $ref: '#/components/schemas/IdentificableDto'
+        - type: object
+          properties:
+            sectorByBatchId:
+              type: integer
+              format: int64
+            buyId:
+              type: integer
+              format: int64
+              description: ID de la compra asociada (Buy)
+            qrToken:
+              type: string
+
+    EventManagerDto:
+      allOf:
+        - $ref: '#/components/schemas/IdentificableDto'
+        - type: object
+          required:
+            - managerId
+            - eventId
+          properties:
+            managerId:
+              type: integer
+              format: int64
+            eventId:
+              type: integer
+              format: int64
+
+    UserInterestDto:
+      allOf:
+        - $ref: '#/components/schemas/IdentificableDto'
+        - type: object
+          required:
+            - userId
+            - categoryId
+            - markedAt
+          properties:
+            userId:
+              type: integer
+              format: int64
+            categoryId:
+              type: integer
+              format: int64
+            markedAt:
+              type: string
+              format: date
