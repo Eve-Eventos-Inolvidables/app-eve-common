@@ -1,4 +1,4 @@
-package Models.Base;
+package com.example.appevecommon.Models.Base;
 
 import jakarta.persistence.*;
 import lombok.Getter;

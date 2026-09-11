@@ -1,0 +1,139 @@
+openapi: 3.0.3
+info:
+  title: BigoBooks Common DTOs - Events & Catalogs
+  version: 1.0.0
+
+paths: {} # No se definen endpoints, solo componentes de transferencia (DTOs)
+
+components:
+  schemas:
+    # 1. Base Identificable DTO (para reflejar la jerarquía base con ID)
+    IdentificableDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+
+    # 2. Categoría de Evento DTO
+    EventCategoryDto:
+      allOf:
+        - $ref: '#/components/schemas/IdentificableDto'
+        - type: object
+          required:
+            - name
+          properties:
+            name:
+              type: string
+              maxLength: 100
+
+    # 3. Tipo de Imagen DTO
+    ImageTypeDto:
+      allOf:
+        - $ref: '#/components/schemas/IdentificableDto'
+        - type: object
+          required:
+            - name
+          properties:
+            name:
+              type: string
+              maxLength: 100
+
+    # 4. Evento Base DTO (Refleja la clase abstracta Event con herencia/composición)
+    EventDto:
+      allOf:
+        - $ref: '#/components/schemas/IdentificableDto'
+        - type: object
+          required:
+            - name
+            - visibleStart
+          properties:
+            categoryId:
+              type: integer
+              format: int64
+              description: ID de la categoría asociada (EventCategory)
+            name:
+              type: string
+              maxLength: 125
+            visibleStart:
+              type: string
+              format: date
+            description:
+              type: string
+              maxLength: 1000
+
+    # 5. Grupo de Eventos DTO (Hereda propiedades de EventDto)
+    EventGroupDto:
+      allOf:
+        - $ref: '#/components/schemas/EventDto'
+        - type: object
+          required:
+            - startDate
+            - endtDate
+            - frontPageLink
+            - bannerLink
+          properties:
+            startDate:
+              type: string
+              format: date
+            endtDate:
+              type: string
+              format: date
+            frontPageLink:
+              type: string
+            bannerLink:
+              type: string
+
+    # 6. Evento Simple DTO (Hereda propiedades de EventDto)
+    SimpleEventDto:
+      allOf:
+        - $ref: '#/components/schemas/EventDto'
+        - type: object
+          required:
+            - date
+            - kickOffTime
+            - primaryColor
+            - secondaryColor
+          properties:
+            date:
+              type: string
+              format: date
+            kickOffTime:
+              type: string
+              example: "20:00:00"
+            ticketsPerPersonLimit:
+              type: integer
+              minimum: 1
+            primaryColor:
+              type: string
+            secondaryColor:
+              type: string
+            mapsLink:
+              type: string
+            groupEventId:
+              type: integer
+              format: int64
+              description: ID del grupo de eventos al que pertenece (EventGroup)
+
+    # 7. Imagen de Evento DTO
+    EventImageDto:
+      allOf:
+        - $ref: '#/components/schemas/IdentificableDto'
+        - type: object
+          required:
+            - name
+            - imageLink
+          properties:
+            eventId:
+              type: integer
+              format: int64
+              description: ID del evento simple asociado
+            imageTypeId:
+              type: integer
+              format: int64
+              description: ID del tipo de imagen asociado
+            name:
+              type: string
+              maxLength: 100
+            imageLink:
+              type: string

@@ -1,4 +1,4 @@
-package Models.Event;
+package com.example.appevecommon.Models.Event;
 
 import Models.Event.Sector.Sector;
 import jakarta.persistence.*;
