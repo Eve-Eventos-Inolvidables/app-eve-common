@@ -1,6 +1,6 @@
 package com.example.appevecommon.Models.User;
 
-import com.example.appevecommon.Models.Base.Identificable;
+import com.example.appevecommon.Models.Base.BaseEntity;
 import com.example.appevecommon.Models.Event.Addons.EventCategory;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Entity
 @Table(name = "User_Interests")
-public class UserInterest extends Identificable {
+public class UserInterest extends BaseEntity {
 
     @NotNull
     @ManyToOne

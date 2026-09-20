@@ -1,6 +1,6 @@
 package com.example.appevecommon.Models.Buy;
 
-import com.example.appevecommon.Models.Base.Identificable;
+import com.example.appevecommon.Models.Base.BaseEntity;
 import com.example.appevecommon.Models.Event.Batch.SectorByBatch;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -12,7 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table( name = "Tickets")
-public class Ticket extends Identificable {
+public class Ticket extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "sectors_by_batch")
     private SectorByBatch sectorByBatch;

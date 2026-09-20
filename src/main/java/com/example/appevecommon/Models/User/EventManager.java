@@ -1,6 +1,6 @@
 package com.example.appevecommon.Models.User;
 
-import com.example.appevecommon.Models.Base.Identificable;
+import com.example.appevecommon.Models.Base.BaseEntity;
 import com.example.appevecommon.Models.Event.SimpleEvent;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Entity
 @Table(name = "Event_Managers")
-public class EventManager extends Identificable {
+public class EventManager extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "manager_id")
