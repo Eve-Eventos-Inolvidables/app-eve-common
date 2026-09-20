@@ -1,6 +1,6 @@
 package com.example.appevecommon.Models.Buy;
 
-import com.example.appevecommon.Models.Event.BelongToEvent;
+import com.example.appevecommon.Models.Event.BelongsToEvent;
 import com.example.appevecommon.Models.User.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
@@ -15,7 +15,7 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @Entity
 @Table( name = "Buys")
-public class Buy extends BelongToEvent {
+public class Buy extends BelongsToEvent {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
