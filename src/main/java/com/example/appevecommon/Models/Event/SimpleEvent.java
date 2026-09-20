@@ -39,10 +39,6 @@ public class SimpleEvent extends Event{
     @Column(name ="maps_link")
     private String mapsLink;
 
-    @ManyToOne
-    @JoinColumn( name = "group_event_id")
-    private EventGroup eventGroup;
-
     @OneToMany(
             mappedBy = "event",
             cascade = CascadeType.ALL,

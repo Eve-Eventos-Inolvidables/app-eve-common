@@ -7,11 +7,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "Event_managers")
+@Table(name = "Event_Managers")
 public class EventManager extends Identificable {
 
     @ManyToOne
@@ -21,4 +23,7 @@ public class EventManager extends Identificable {
     @ManyToOne
     @JoinColumn(name = "event_id")
     private SimpleEvent event;
+
+    @Column( name = "assigned_at")
+    private LocalDate assignedAt;
 }
