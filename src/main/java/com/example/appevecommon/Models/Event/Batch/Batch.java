@@ -17,8 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @Table( name = "Batches")
 public class Batch extends ArchivableBelongsToEvent {
-    @Id
-    private Long id;
+
     @Column( name = "name",nullable = false,length = 100)
     private String name;
 

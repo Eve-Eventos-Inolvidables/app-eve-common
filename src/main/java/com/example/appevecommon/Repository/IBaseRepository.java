@@ -17,4 +17,6 @@ public interface IBaseRepository<X extends BaseEntity> extends JpaRepository<X,L
 
     @Query(value = "SELECT * FROM #{#entityName} WHERE id = :id", nativeQuery = true)
     Optional<X> findByIdIncludingInactive(@Param("id") Long id);
+
+
 }
