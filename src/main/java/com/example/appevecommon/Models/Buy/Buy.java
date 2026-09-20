@@ -13,7 +13,7 @@ import java.time.LocalTime;
 @Getter
 @Setter
 @NoArgsConstructor
-@Entity
+@Entity(name = "Buys")
 @Table( name = "Buys")
 public class Buy extends BelongsToEvent {
 

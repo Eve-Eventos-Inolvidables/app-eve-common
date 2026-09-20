@@ -10,7 +10,7 @@ import lombok.Setter;
 
 import java.util.List;
 
-@Entity
+@Entity(name = "Sectors")
 @Getter
 @Setter
 @NoArgsConstructor

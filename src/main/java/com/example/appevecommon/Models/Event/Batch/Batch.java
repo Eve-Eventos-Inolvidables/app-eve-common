@@ -11,14 +11,13 @@ import lombok.Setter;
 import java.time.LocalDate;
 import java.util.List;
 
-@Entity
+@Entity(name = "Batches")
 @Getter
 @Setter
 @NoArgsConstructor
 @Table( name = "Batches")
 public class Batch extends ArchivableBelongsToEvent {
-    @Id
-    private Long id;
+
     @Column( name = "name",nullable = false,length = 100)
     private String name;
 

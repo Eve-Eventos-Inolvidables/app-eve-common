@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
-@Entity
+@Entity(name = "Event_Managers")
 @Table(name = "Event_Managers")
 public class EventManager extends BaseEntity {
 

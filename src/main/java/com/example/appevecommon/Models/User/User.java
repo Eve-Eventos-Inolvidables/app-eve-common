@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@Entity
+@Entity(name = "Users")
 @Table(name = "Users")
 public class User extends Archivable {
 
