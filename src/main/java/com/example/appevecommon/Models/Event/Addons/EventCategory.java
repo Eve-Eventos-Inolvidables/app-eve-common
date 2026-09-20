@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@Entity
+@Entity(name = "Event_Categories")
 @Table( name =  "Event_Categories")
 public class EventCategory extends Archivable {
     @Column(name = "name", nullable = false, length = 100)

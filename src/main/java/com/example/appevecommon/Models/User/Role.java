@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@Entity
+@Entity(name = "Roles")
 @Table(name = "Roles")
 public class Role extends Archivable {
 

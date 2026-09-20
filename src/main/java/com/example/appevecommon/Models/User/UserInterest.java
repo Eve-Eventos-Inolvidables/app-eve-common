@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
-@Entity
+@Entity(name = "User_Interests")
 @Table(name = "User_Interests")
 public class UserInterest extends BaseEntity {
 

@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@Entity
+@Entity(name = "Events")
 @Table(name = "Events")
 
 public class SimpleEvent extends Event{

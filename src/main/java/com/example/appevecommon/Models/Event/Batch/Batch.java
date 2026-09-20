@@ -11,7 +11,7 @@ import lombok.Setter;
 import java.time.LocalDate;
 import java.util.List;
 
-@Entity
+@Entity(name = "Batches")
 @Getter
 @Setter
 @NoArgsConstructor

@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
+@Entity(name = "Sectors_By_Batch")
 @Getter
 @Setter
 @NoArgsConstructor

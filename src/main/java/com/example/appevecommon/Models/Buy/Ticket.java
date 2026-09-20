@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@Entity
+@Entity(name = "Tickets")
 @Table( name = "Tickets")
 public class Ticket extends BaseEntity {
     @ManyToOne
