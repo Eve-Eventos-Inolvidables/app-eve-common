@@ -1,4 +1,4 @@
-package com.example.appevecommon.Service.exception;
+package com.example.appevecommon.Service.Exception;
 
 public class ResourceNotFoundException extends RuntimeException {
 

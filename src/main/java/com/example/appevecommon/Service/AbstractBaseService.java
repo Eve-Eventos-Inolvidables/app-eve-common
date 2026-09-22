@@ -4,7 +4,7 @@ import com.example.appevecommon.Models.Base.BaseEntity;
 import com.example.appevecommon.Repository.IBaseRepository;
 import com.example.appevecommon.Service.Utilities.PagedFilter;
 import com.example.appevecommon.Service.Utilities.Responses.PageResult;
-import com.example.appevecommon.Service.exception.ResourceNotFoundException;
+import com.example.appevecommon.Service.Exception.ResourceNotFoundException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
