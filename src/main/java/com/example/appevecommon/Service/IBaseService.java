@@ -18,7 +18,7 @@ public interface IBaseService<E extends BaseEntity, D, F extends PagedFilter> { 
         throw new UnsupportedOperationException("getAll() no implementado");
     }
 
-    //paginado con filtro opcional (filter == null → trae todo paginado)
+    //Paged with ooptional filter
     default PageResult<D> getByFilter(F filter) {
         throw new UnsupportedOperationException("getByFilter() no implementado");
     }
