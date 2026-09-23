@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: BigoBooks Common DTOs
+  title: App-Eve-Common DTOs
   version: 1.1.0
 
 paths: {}
@@ -70,20 +70,6 @@ components:
               type: string
               maxLength: 100
 
-    EventGroupDto:
-      allOf:
-        - $ref: '#/components/schemas/EventDto'
-        - type: object
-          required:
-            - startDate
-            - endDate
-          properties:
-            startDate:
-              type: string
-              format: date
-            endDate:
-              type: string
-              format: date
 
     SimpleEventDto:
       allOf:
@@ -111,10 +97,6 @@ components:
               type: string
             mapsLink:
               type: string
-            eventGroupId:
-              type: integer
-              format: int64
-              description: ID del grupo de eventos si pertenece a uno
 
     SectorDto:
       allOf:
