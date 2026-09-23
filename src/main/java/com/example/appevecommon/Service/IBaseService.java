@@ -11,6 +11,8 @@ public interface IBaseService<E extends BaseEntity, D, F extends PagedFilter> { 
     D create(D dto);
     D getById(Long id);
     D update(Long id, D dto );
+    E getEntity(Long id) ;
+
     boolean delete(Long id);
 
     //!!!USE ONLY WITH SMALL VOLUME TABLES

@@ -12,6 +12,14 @@ public abstract class AbstractArchivableBaseService<E extends Archivable, D, F e
     }
 
     @Override
+    public D update(Long id, D dto) {
+        E existing = getEntity(id);
+        E entity = toEntity(dto);
+        entity.setId(id);
+        entity.setArchived(existing.isArchived()); // preserve archived status
+        return toDto(repository.save(entity));
+    }
+    @Override
     public boolean delete(Long id) {
         IArchivableRepository<E> repo = (IArchivableRepository<E>) repository;
         repo.archive(id);

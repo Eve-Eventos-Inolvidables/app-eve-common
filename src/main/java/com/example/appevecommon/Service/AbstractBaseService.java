@@ -34,11 +34,16 @@ public abstract class AbstractBaseService<E extends BaseEntity, D, F extends Pag
         return toDto(entity);
     }
 
+
+    @Override
+    public E getEntity(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(id));
+    }
+
     @Override
     public D getById(Long id) {
-        E entity = repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(id));
-        return toDto(entity);
+        return toDto(getEntity(id));
     }
 
     @Override
