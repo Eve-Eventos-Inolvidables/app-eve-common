@@ -20,7 +20,7 @@ import java.util.List;
 public class User extends Archivable {
 
     @NotNull
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
@@ -38,7 +38,8 @@ public class User extends Archivable {
     private String password;
 
     @OneToMany(
-            mappedBy = "user"
+            mappedBy = "user",
+            fetch = FetchType.LAZY
     )
     private List<Buy> buyList;
 }

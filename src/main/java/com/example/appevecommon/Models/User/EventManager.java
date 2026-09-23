@@ -16,11 +16,11 @@ import java.time.LocalDate;
 @Table(name = "Event_Managers")
 public class EventManager extends BaseEntity {
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "manager_id")
     private User manager;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "event_id")
     private SimpleEvent event;
 

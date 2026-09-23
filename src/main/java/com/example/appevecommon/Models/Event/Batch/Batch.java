@@ -30,7 +30,8 @@ public class Batch extends ArchivableBelongsToEvent {
     @OneToMany(
             mappedBy = "batch",
             cascade = CascadeType.ALL,
-            orphanRemoval = true
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
     )
     private List<SectorByBatch> sectorByBatchesList;
 }

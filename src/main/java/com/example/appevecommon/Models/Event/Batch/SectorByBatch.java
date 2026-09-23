@@ -15,11 +15,11 @@ import lombok.Setter;
 @Table( name = "Sectors_By_Batch")
 
 public class SectorByBatch extends Archivable {
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn( name = "sector_id")
     private Sector sector;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn( name = "batch_id")
     private Batch batch;
 

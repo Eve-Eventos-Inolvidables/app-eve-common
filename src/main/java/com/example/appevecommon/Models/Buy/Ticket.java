@@ -13,7 +13,7 @@ import lombok.Setter;
 @Entity(name = "Tickets")
 @Table( name = "Tickets")
 public class Ticket extends BaseEntity {
-    @ManyToOne
+    @ManyToOne( fetch = FetchType.EAGER)
     @JoinColumn(name = "sectors_by_batch")
     private SectorByBatch sectorByBatch;
 

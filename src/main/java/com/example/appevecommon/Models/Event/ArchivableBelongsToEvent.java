@@ -1,6 +1,7 @@
 package com.example.appevecommon.Models.Event;
 
 import com.example.appevecommon.Models.Base.Archivable;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MappedSuperclass;
@@ -13,7 +14,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @MappedSuperclass
 public abstract class ArchivableBelongsToEvent extends Archivable {
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "event_id")
     private SimpleEvent event;
 }

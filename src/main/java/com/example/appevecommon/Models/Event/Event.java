@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @MappedSuperclass
 public abstract class Event extends Archivable {
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
     private EventCategory eventCategory;
 

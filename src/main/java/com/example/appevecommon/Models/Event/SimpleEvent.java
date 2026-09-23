@@ -42,7 +42,8 @@ public class SimpleEvent extends Event{
     @OneToMany(
             mappedBy = "event",
             cascade = CascadeType.ALL,
-            orphanRemoval = true
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
     )
     private List<Sector> sectorList;
 

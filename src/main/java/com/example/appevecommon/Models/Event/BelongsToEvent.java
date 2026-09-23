@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @MappedSuperclass
 public abstract class BelongsToEvent extends BaseEntity {
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "event_id")
     private SimpleEvent event;
 }

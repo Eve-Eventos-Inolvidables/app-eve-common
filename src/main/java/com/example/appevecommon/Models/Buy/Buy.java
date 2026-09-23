@@ -17,8 +17,8 @@ import java.time.LocalTime;
 @Table( name = "Buys")
 public class Buy extends BelongsToEvent {
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id" )
     private User user;
 
     @Column(name = "total", nullable = false)
