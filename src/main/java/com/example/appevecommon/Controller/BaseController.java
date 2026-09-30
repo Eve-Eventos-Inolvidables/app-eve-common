@@ -55,12 +55,12 @@ public abstract class BaseController<E extends BaseEntity,
         return ResponseFactory.ok("Recurso eliminado exitosamente", null);
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public Response<List<D>> getAll() {
         return ResponseFactory.ok(service.getAll());
     }
 
-    @GetMapping("/paged")
+    @GetMapping
     public Response<PageResult<D>> getByFilter(@ModelAttribute F filter) {
         return ResponseFactory.ok(service.getByFilter(filter));
     }

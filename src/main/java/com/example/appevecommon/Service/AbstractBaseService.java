@@ -34,7 +34,6 @@ public abstract class AbstractBaseService<E extends BaseEntity, D, F extends Pag
         return toDto(entity);
     }
 
-
     @Override
     public E getEntity(Long id) {
         return repository.findById(id)

@@ -17,7 +17,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<Response<ErrorResponse>> handleResourceNotFound(ResourceNotFoundException ex) {
-        return build(404, ex.getMessage());
+        return build(404,"Recurso no encontrado", ex.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -25,16 +25,17 @@ public class GlobalExceptionHandler {
         String message = ex.getBindingResult().getFieldErrors().stream()
                 .map(error -> error.getField() + ": " + error.getDefaultMessage())
                 .collect(Collectors.joining("; "));
-        return build(400, message);
+        return build(400,"Mala petición", message);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Response<ErrorResponse>> handleGeneric(Exception ex) {
         log.error("Error no manejado", ex);
-        return build(500, "Error interno del servidor");
+        return build(500,"Error interno del servidor", ex.getMessage());
     }
 
-    private ResponseEntity<Response<ErrorResponse>> build(int statusCode, String message) {
-        return ResponseEntity.status(statusCode).body(ResponseFactory.error(statusCode, message));
+    // PRIVATE ------------------------------------------------------------------------------------
+    private ResponseEntity<Response<ErrorResponse>> build(int statusCode, String responseMessage, String errorMessage) {
+        return ResponseEntity.status(statusCode).body(ResponseFactory.error(statusCode, responseMessage, errorMessage));
     }
 }

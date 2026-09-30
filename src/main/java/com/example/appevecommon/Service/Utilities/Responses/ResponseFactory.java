@@ -21,11 +21,11 @@ public final class ResponseFactory {
     }
 
     //NOT OK
-    public static Response<ErrorResponse> error(String message) {
-        return new Response<>(false, message, new ErrorResponse(DEFAULT_ERROR_STATUS, message));
+    public static Response<ErrorResponse> error(String responseMessage, String errorMessage) {
+        return new Response<>(false, responseMessage, new ErrorResponse(DEFAULT_ERROR_STATUS, errorMessage));
     }
 
-    public static Response<ErrorResponse> error(int statusCode, String message) {
-        return new Response<>(false, message, new ErrorResponse(statusCode, message));
+    public static Response<ErrorResponse> error(int statusCode, String responseMessage, String errorMessage) {
+        return new Response<>(false, responseMessage, new ErrorResponse(statusCode,errorMessage));
     }
 }
