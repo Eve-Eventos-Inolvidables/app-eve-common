@@ -234,6 +234,9 @@ components:
             eventId:
               type: integer
               format: int64
+            assignedAt:
+              type: string
+              format: date
 
     UserInterestDto:
       allOf:
