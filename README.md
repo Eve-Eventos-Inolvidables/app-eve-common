@@ -8,7 +8,7 @@ No es una aplicación ejecutable. Cada microservicio la consume como dependencia
 
 - Java 21
 - Spring Boot 4.1.x (misma versión que esta librería)
-- Configuración propia de PostgreSQL en su `application.properties`
+- Configuración propia de PostgreSQL en su `eve-common-defaults.properties`
 - Maven
 
 ## 1. Instalar la librería en tu máquina
