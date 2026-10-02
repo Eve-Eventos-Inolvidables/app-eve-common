@@ -32,20 +32,20 @@ public abstract class BaseController<E extends BaseEntity,
         this.service = service;
     }
 
-    @PostMapping
-    public Response<D> create(@Valid @RequestBody D dto) {
-        return ResponseFactory.ok("Recurso creado exitosamente", service.create(dto));
-    }
+//    @PostMapping
+//    public Response<D> create(@Valid @RequestBody D dto) {
+//        return ResponseFactory.ok("Recurso creado exitosamente", service.create(dto));
+//    }
 
     @GetMapping("/{id}")
     public Response<D> getById(@PathVariable Long id) {
         return ResponseFactory.ok(service.getById(id));
     }
 
-    @PutMapping("/{id}")
-    public Response<D> update(@PathVariable Long id, @Valid @RequestBody D dto) {
-        return ResponseFactory.ok("Recurso actualizado exitosamente", service.update(id, dto));
-    }
+//    @PutMapping("/{id}")
+//    public Response<D> update(@PathVariable Long id, @Valid @RequestBody D dto) {
+//        return ResponseFactory.ok("Recurso actualizado exitosamente", service.update(id, dto));
+//    }
 
     @DeleteMapping("/{id}")
     public Response<Void> delete(@PathVariable Long id) {

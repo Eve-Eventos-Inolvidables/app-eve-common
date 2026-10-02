@@ -157,7 +157,7 @@ components:
 
     RoleDto:
       allOf:
-        - $ref: '#/components/schemas/IdentificableDto'
+        - $ref: '#/components/schemas/ArchivableDto'
         - type: object
           required:
             - name
@@ -166,26 +166,50 @@ components:
               type: string
               maxLength: 50
 
-    UserDto:
+    CreateUpdateRoleDto:
       allOf:
-        - $ref: '#/components/schemas/ArchivableDto'
+        - type: object
+          required:
+          - name
+          properties:
+            name:
+              type: string
+              maxLength: 20
+
+
+
+    #DeFine props sin hacerlas obligatorias
+    UserBaseDto:
+      type: object
+      properties:
+        roleId:
+          type: integer
+          format: int64
+        name:
+          type: string
+          maxLength: 125
+        email:
+          type: string
+          format: email
+          maxLength: 150
+        password:
+          type: string
+
+    # 2. Importa la base y hace obligatorios algunos campos
+    CreateUserDto:
+      allOf:
+        - $ref: '#/components/schemas/UserBaseDto'
         - type: object
           required:
             - roleId
             - name
             - email
-          properties:
-            roleId:
-              type: integer
-              format: int64
-            name:
-              type: string
-              maxLength: 125
-            email:
-              type: string
-              format: email
-              maxLength: 150
+            - password
 
+    # 3.actualizar, todos los campos base opcionales
+    UpdateUserDto:
+      allOf:
+        - $ref: '#/components/schemas/UserBaseDto'
     BuyDto:
       allOf:
         - $ref: '#/components/schemas/BelongToEventDto'
@@ -203,7 +227,22 @@ components:
               minimum: 1
             date:
               type: string
-              example: "15:30:00"
+    UserDto:
+      allOf:
+        - $ref: '#/components/schemas/ArchivableDto'
+        - type: object
+        - $ref: '#/components/schemas/UserBaseDto'
+
+    #Full user
+    FullUserDto:
+      allOf:
+        - $ref: '#/components/schemas/UserDto'
+        - type: object
+          properties:
+            interests:
+              type: array
+              items:
+                $ref: '#/components/schemas/UserInterestDto'
 
     TicketDto:
       allOf:
@@ -220,13 +259,14 @@ components:
             qrToken:
               type: string
 
-    EventManagerDto:
+    CreateEventManagerDto:
       allOf:
         - $ref: '#/components/schemas/IdentificableDto'
         - type: object
           required:
             - managerId
             - eventId
+            - assignedAt
           properties:
             managerId:
               type: integer
@@ -238,9 +278,14 @@ components:
               type: string
               format: date
 
-    UserInterestDto:
+    EventManagerDto:
       allOf:
         - $ref: '#/components/schemas/IdentificableDto'
+        - $ref: '#/components/schemas/CreateUserInterestDto'
+        - type: object
+
+    CreateUserInterestDto:
+      allOf:
         - type: object
           required:
             - userId
@@ -256,3 +301,8 @@ components:
             markedAt:
               type: string
               format: date
+    UserInterestDto:
+      allOf:
+        - $ref: '#/components/schemas/IdentificableDto'
+        - $ref: '#/components/schemas/CreateUserInterestDto'
+        - type: object
