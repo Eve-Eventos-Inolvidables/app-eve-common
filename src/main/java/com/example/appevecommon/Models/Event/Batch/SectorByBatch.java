@@ -1,6 +1,6 @@
 package com.example.appevecommon.Models.Event.Batch;
 
-import com.example.appevecommon.Models.Base.Archivable;
+import com.example.appevecommon.Models.Base.BaseEntity;
 import com.example.appevecommon.Models.Event.Sector.Sector;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
@@ -14,7 +14,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Table( name = "Sectors_By_Batch")
 
-public class SectorByBatch extends Archivable {
+public class SectorByBatch extends BaseEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn( name = "sector_id")
     private Sector sector;

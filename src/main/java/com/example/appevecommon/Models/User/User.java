@@ -1,6 +1,6 @@
 package com.example.appevecommon.Models.User;
 
-import com.example.appevecommon.Models.Base.Archivable;
+import com.example.appevecommon.Models.Base.BaseEntity;
 import com.example.appevecommon.Models.Buy.Buy;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -17,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity(name = "Users")
 @Table(name = "Users")
-public class User extends Archivable {
+public class User extends BaseEntity {
 
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)

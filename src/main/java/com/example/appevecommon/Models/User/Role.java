@@ -1,7 +1,6 @@
 package com.example.appevecommon.Models.User;
 
-import com.example.appevecommon.Models.Base.Archivable;
-
+import com.example.appevecommon.Models.Base.BaseEntity;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -13,7 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity(name = "Roles")
 @Table(name = "Roles")
-public class Role extends Archivable {
+public class Role extends BaseEntity {
 
     @NotBlank
     @Column(name = "name", nullable = false, unique = true, length = 50)

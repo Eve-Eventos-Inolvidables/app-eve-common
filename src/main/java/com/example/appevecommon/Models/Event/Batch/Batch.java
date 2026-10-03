@@ -1,7 +1,7 @@
 package com.example.appevecommon.Models.Event.Batch;
 
 
-import com.example.appevecommon.Models.Event.ArchivableBelongsToEvent;
+import com.example.appevecommon.Models.Event.BelongsToEvent;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -16,7 +16,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @Table( name = "Batches")
-public class Batch extends ArchivableBelongsToEvent {
+public class Batch extends BelongsToEvent {
 
     @Column( name = "name",nullable = false,length = 100)
     private String name;

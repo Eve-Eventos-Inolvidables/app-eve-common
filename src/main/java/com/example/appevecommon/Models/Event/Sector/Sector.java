@@ -1,6 +1,6 @@
 package com.example.appevecommon.Models.Event.Sector;
 
-import com.example.appevecommon.Models.Event.ArchivableBelongsToEvent;
+import com.example.appevecommon.Models.Event.BelongsToEvent;
 import com.example.appevecommon.Models.Event.Batch.SectorByBatch;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @Table( name = "Sectors")
 
-public class Sector extends ArchivableBelongsToEvent {
+public class Sector extends BelongsToEvent {
 
 
     @Column( name = "name",nullable = false,length = 100)

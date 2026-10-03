@@ -8,11 +8,10 @@ import java.util.List;
 //Los services concretos eligen la base según la entidad. Cuando haya controllers, sigue el @RestControllerAdvice para mapear excepciones al mismo formato.
 public interface IBaseService<E extends BaseEntity, D, F extends PagedFilter> { //D = DTO F = Filter
     //CRUD
-    D create(D dto);
     D getById(Long id);
-    D update(Long id, D dto );
     E getEntity(Long id) ;
 
+    //SOFT DELETE: archiva la fila en vez de eliminarla
     boolean delete(Long id);
 
     //!!!USE ONLY WITH SMALL VOLUME TABLES

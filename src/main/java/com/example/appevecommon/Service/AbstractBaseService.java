@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public abstract class AbstractBaseService<E extends BaseEntity, D, F extends PagedFilter>
         implements IBaseService<E, D, F> {
@@ -28,10 +29,16 @@ public abstract class AbstractBaseService<E extends BaseEntity, D, F extends Pag
 
     public abstract Specification<E> toSpecification(F filter);
 
-    @Override
-    public D create(D dto) {
-        E entity = repository.save(toEntity(dto));
-        return toDto(entity);
+    /**
+     * Loads the entity, applies the changes and saves it.
+     * Used by update() so untouched columns (id, archived, and any other
+     * server-owned field) keep their current values. NEVER rebuild the entity
+     * with toEntity() inside an update: that is a full replace and resets them.
+     */
+    protected E patch(Long id, Consumer<E> changes) {
+        E entity = getEntity(id);
+        changes.accept(entity);
+        return repository.save(entity);
     }
 
     @Override
@@ -46,19 +53,11 @@ public abstract class AbstractBaseService<E extends BaseEntity, D, F extends Pag
     }
 
     @Override
-    public D update(Long id, D dto) {
-        repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
-        E entity = toEntity(dto);
-        entity.setId(id);
-        return toDto(repository.save(entity));
-    }
-
-    @Override
     public boolean delete(Long id) {
         if (!repository.existsById(id)) {
             return false;
         }
-        repository.deleteById(id);
+        repository.archive(id);
         return true;
     }
 

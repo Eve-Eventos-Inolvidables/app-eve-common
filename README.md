@@ -38,7 +38,7 @@ Con solo agregar la dependencia, la auto-configuración de la librería registra
 - **Entidades compartidas** (`com.example.appevecommon.Models.*`): `SimpleEvent`, `User`, `Batch`, `Sector`, `EventCategory`, `Buy`, `Ticket`, etc.
 - **Manejo de errores común**: `GlobalExceptionHandler` + formato `Response`.
 - **DTOs** generados por OpenAPI (`org.openapitools.model.*`).
-- Clases base para implementar tus capas: `IBaseRepository`, `IArchivableRepository`, `IBaseService`, `AbstractBaseService`, `AbstractArchivableBaseService`, `BaseController`, `PagedFilter`, `PageResult`, `ResponseFactory`.
+- Clases base para implementar tus capas: `IBaseRepository`, `IBaseService`, `AbstractBaseService`, `BaseController`, `PagedFilter`, `PageResult`, `ResponseFactory`.
 
 ## 4. Qué debés implementar en tu microservicio
 
@@ -46,7 +46,7 @@ Siempre en paquetes propios (no toques la librería). Ejemplo con `EventCategory
 
 ```java
 // Repository
-public interface IEventCategoryRepository extends IArchivableRepository<EventCategory> {}
+public interface IEventCategoryRepository extends IBaseRepository<EventCategory> {}
 
 // Filter
 public class EventCategoryFilter extends PagedFilter {
@@ -56,7 +56,7 @@ public class EventCategoryFilter extends PagedFilter {
 // Service
 @Service
 public class EventCategoryService
-        extends AbstractArchivableBaseService<EventCategory, EventCategoryDto, EventCategoryFilter> {
+        extends AbstractBaseService<EventCategory, EventCategoryDto, EventCategoryFilter> {
 
     protected EventCategoryService(IEventCategoryRepository repository) {
         super(repository);
@@ -84,12 +84,64 @@ public class EventCategoryController
 }
 ```
 
-Regla rápida para elegir la base:
+## 5. Borrado lógico en todas las entidades
 
-- Entidad con borrado lógico (extiende `Archivable`): repositorio `IArchivableRepository` + servicio `AbstractArchivableBaseService`
-- Entidad sin borrado lógico (extiende `BaseEntity`): repositorio `IBaseRepository` + servicio `AbstractBaseService`
+`BaseEntity` ya trae el flag `archived` con `@SQLRestriction("is_archived = false")`, así que **toda entidad es soft delete por defecto** y no hay que elegir base de repositorio ni de servicio. `delete(id)` archiva la fila en vez de eliminarla.
 
-## 5. Actualizar la librería
+Para incluir o excluir lo archivado:
+
+| Método | Qué hace |
+|---|---|
+| `findAll()` / `findById()` / `findAll(spec)` | Solo lo activo (el filtro lo inyecta Hibernate) |
+| `findAllIncludingInactive()` | Todo, archivado incluido |
+| `findByIdIncludingInactive(id)` | Busca un recurso archivado puntual |
+| `unarchive(id)` / `setArchived(false)` | Restaura un recurso |
+
+Consecuencia a tener en cuenta: el `@SQLRestriction` **se propaga a las asociaciones**, así que un hijo archivado desaparece de la colección del padre (`Buy.ticketList`, `Event.sectorList`, etc.).
+
+## 6. Cómo escribir un `update`
+
+La base no impone `create`/`update`: cada service los declara con sus propios DTOs. La regla para no romper datos:
+
+**`toEntity(dto)` es únicamente para `create`. En un `update`, nunca reconstruyas la entidad desde cero** — usá `patch()`, que carga la entidad, le aplica solo los cambios y la guarda:
+
+```java
+@Override
+public EventCategoryDto update(Long id, UpdateEventCategoryDto dto) {
+    return toDto(patch(id, e -> {
+        e.setName(dto.getName());
+    }));
+}
+```
+
+`archived`, `id` y cualquier campo que el DTO de update no declare se conservan solos. Si en cambio hacés `toEntity(dto)` + `setId(id)` + `save(...)`, el merge reemplaza la fila completa y esos campos vuelven al default (por ejemplo `archived = false`, que des-archivaría el recurso).
+
+## 7. Parámetro `sort` del `PagedFilter`
+
+`sort` acepta `campo` o `campo desc`, separados por coma o espacio. `desc` es el único valor que invierte el orden; cualquier otro token se toma como ascendente.
+
+| Valor enviado | Resultado |
+|---|---|
+| *(ausente o vacío)* | Sin `ORDER BY` — evitá paginar así: el orden no es estable entre páginas |
+| `name` | `name` ascendente |
+| `name asc` | `name` ascendente |
+| `name desc` / `name,desc` | `name` descendente |
+| `name, desc` | `name` descendente (espacios alrededor de la coma) |
+| `name lo-que-sea` | `name` ascendente (token no reconocido) |
+| `name desc otro` | `name` descendente; los tokens extra se ignoran |
+| `name,desc,id` | Solo `name` descendente — **no hay multi-ordenamiento** |
+| `user.name desc` | Ordena por la propiedad anidada `user.name` |
+| `columna_sql desc` | Debe ser la propiedad JPA (`eventName`), no el nombre de la columna (`event_name`) |
+| `id; DROP TABLE ...` | Campo inexistente → 500 (ver más abajo) |
+
+```http
+GET /api/event-categories?page=0&size=20&sort=name+asc
+GET /api/event-categories?page=0&size=20&sort=name,desc
+```
+
+Dos cosas a tener en cuenta: `sort` **no se valida contra una whitelist**, así que un campo inexistente lanza `PropertyReferenceException`, que el `GlobalExceptionHandler` mapea a **500** y no a 400. Y como no hay segundo criterio de desempate, conviene paginar con `sort=id desc`.
+
+## 8. Actualizar la librería
 
 ```bash
 git pull

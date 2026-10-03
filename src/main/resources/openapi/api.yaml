@@ -176,8 +176,6 @@ components:
               type: string
               maxLength: 20
 
-
-
     #DeFine props sin hacerlas obligatorias
     UserBaseDto:
       type: object
