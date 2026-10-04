@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: App-Eve-Common DTOs
-  version: 1.1.0
+  version: 1.2.0
 
 paths: {}
 
@@ -25,158 +25,40 @@ components:
               type: boolean
               default: false
 
-    BelongToEventDto:
-      allOf:
-        - $ref: '#/components/schemas/ArchivableDto'
-        - type: object
-          properties:
-            eventId:
-              type: integer
-              format: int64
-              description: ID del evento asociado (SimpleEvent)
+    # --- PATRON ---
+    # Por entidad se generan cuatro piezas:
+    #   XBaseDto    -> properties, todas opcionales, SIN id/archived (son de lectura)
+    #   CreateXDto  -> XBaseDto + required
+    #   UpdateXDto  -> XBaseDto sola (todo opcional), solo en recursos que se editan
+    #   XDto        -> ArchivableDto + XBaseDto, mas los campos que calcula el backend
 
-    EventDto:
-      allOf:
-        - $ref: '#/components/schemas/ArchivableDto'
-        - type: object
-          required:
-            - name
-            - visibleStart
-          properties:
-            categoryId:
-              type: integer
-              format: int64
-              description: ID de la categoría (EventCategory)
-            name:
-              type: string
-              maxLength: 125
-            visibleStart:
-              type: string
-              format: date
-            description:
-              type: string
-              maxLength: 1000
+    # --- ROLES ---
 
-    # --- ENTIDADES CONCRETAS EXISTENTES ---
+    RoleBaseDto:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 50
 
-    EventCategoryDto:
+    CreateRoleDto:
       allOf:
-        - $ref: '#/components/schemas/ArchivableDto'
+        - $ref: '#/components/schemas/RoleBaseDto'
         - type: object
           required:
             - name
-          properties:
-            name:
-              type: string
-              maxLength: 100
 
-
-    SimpleEventDto:
+    UpdateRoleDto:
       allOf:
-        - $ref: '#/components/schemas/EventDto'
-        - type: object
-          required:
-            - date
-            - kickOffTime
-            - ticketsPerPersonLimit
-            - primaryColor
-            - secondaryColor
-          properties:
-            date:
-              type: string
-              format: date
-            kickOffTime:
-              type: string
-              example: "20:00:00"
-            ticketsPerPersonLimit:
-              type: integer
-              minimum: 1
-            primaryColor:
-              type: string
-            secondaryColor:
-              type: string
-            mapsLink:
-              type: string
-
-    SectorDto:
-      allOf:
-        - $ref: '#/components/schemas/BelongToEventDto'
-        - type: object
-          required:
-            - name
-            - capacity
-          properties:
-            name:
-              type: string
-              maxLength: 100
-            capacity:
-              type: integer
-              minimum: 1
-
-    BatchDto:
-      allOf:
-        - $ref: '#/components/schemas/BelongToEventDto'
-        - type: object
-          required:
-            - name
-            - startDate
-            - endDate
-          properties:
-            name:
-              type: string
-              maxLength: 100
-            startDate:
-              type: string
-              format: date
-            endDate:
-              type: string
-              format: date
-
-    SectorByBatchDto:
-      allOf:
-        - $ref: '#/components/schemas/ArchivableDto'
-        - type: object
-          required:
-            - price
-            - quantity
-          properties:
-            sectorId:
-              type: integer
-              format: int64
-            batchId:
-              type: integer
-              format: int64
-            price:
-              type: integer
-              minimum: 1
-            quantity:
-              type: integer
-              minimum: 1
-
-    # --- NUEVAS ENTIDADES (USUARIOS Y COMPRAS) ---
+        - $ref: '#/components/schemas/RoleBaseDto'
 
     RoleDto:
       allOf:
         - $ref: '#/components/schemas/ArchivableDto'
-        - type: object
-          required:
-            - name
-          properties:
-            name:
-              type: string
-              maxLength: 50
+        - $ref: '#/components/schemas/RoleBaseDto'
 
-    CreateUpdateRoleDto:
-      allOf:
-        - type: object
-          required:
-          - name
-          properties:
-            name:
-              type: string
-              maxLength: 20
+    # --- USUARIOS ---
 
-    #DeFine props sin hacerlas obligatorias
     UserBaseDto:
       type: object
       properties:
@@ -192,8 +74,8 @@ components:
           maxLength: 150
         password:
           type: string
+          maxLength: 255
 
-    # 2. Importa la base y hace obligatorios algunos campos
     CreateUserDto:
       allOf:
         - $ref: '#/components/schemas/UserBaseDto'
@@ -204,31 +86,13 @@ components:
             - email
             - password
 
-    # 3.actualizar, todos los campos base opcionales
     UpdateUserDto:
       allOf:
         - $ref: '#/components/schemas/UserBaseDto'
-    BuyDto:
-      allOf:
-        - $ref: '#/components/schemas/BelongToEventDto'
-        - type: object
-          required:
-            - userId
-            - total
-            - date
-          properties:
-            userId:
-              type: integer
-              format: int64
-            total:
-              type: integer
-              minimum: 1
-            date:
-              type: string
+
     UserDto:
       allOf:
         - $ref: '#/components/schemas/ArchivableDto'
-        - type: object
         - $ref: '#/components/schemas/UserBaseDto'
 
     #Full user
@@ -242,65 +106,320 @@ components:
               items:
                 $ref: '#/components/schemas/UserInterestDto'
 
-    TicketDto:
+    # --- CATEGORIAS DE EVENTO ---
+
+    EventCategoryBaseDto:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 100
+
+    CreateEventCategoryDto:
       allOf:
-        - $ref: '#/components/schemas/IdentificableDto'
+        - $ref: '#/components/schemas/EventCategoryBaseDto'
+        - type: object
+          required:
+            - name
+
+    UpdateEventCategoryDto:
+      allOf:
+        - $ref: '#/components/schemas/EventCategoryBaseDto'
+
+    EventCategoryDto:
+      allOf:
+        - $ref: '#/components/schemas/ArchivableDto'
+        - $ref: '#/components/schemas/EventCategoryBaseDto'
+
+    # --- EVENTOS ---
+
+    SimpleEventBaseDto:
+      type: object
+      properties:
+        categoryId:
+          type: integer
+          format: int64
+          description: ID de la categoría (EventCategory)
+        name:
+          type: string
+          maxLength: 125
+        visibleStart:
+          type: string
+          format: date
+        description:
+          type: string
+          maxLength: 1000
+        date:
+          type: string
+          format: date
+        kickOffTime:
+          type: string
+          format: partial-time
+          example: "20:00:00"
+        ticketsPerPersonLimit:
+          type: integer
+          minimum: 1
+        primaryColor:
+          type: string
+          maxLength: 255
+        secondaryColor:
+          type: string
+          maxLength: 255
+        mapsLink:
+          type: string
+          maxLength: 255
+
+    CreateSimpleEventDto:
+      allOf:
+        - $ref: '#/components/schemas/SimpleEventBaseDto'
+        - type: object
+          required:
+            - name
+            - visibleStart
+            - date
+            - kickOffTime
+            - ticketsPerPersonLimit
+            - primaryColor
+            - secondaryColor
+
+    UpdateSimpleEventDto:
+      allOf:
+        - $ref: '#/components/schemas/SimpleEventBaseDto'
+
+    SimpleEventDto:
+      allOf:
+        - $ref: '#/components/schemas/ArchivableDto'
+        - $ref: '#/components/schemas/SimpleEventBaseDto'
+
+    # --- SECTORES ---
+
+    SectorBaseDto:
+      type: object
+      properties:
+        eventId:
+          type: integer
+          format: int64
+          description: ID del evento asociado (SimpleEvent)
+        name:
+          type: string
+          maxLength: 100
+        capacity:
+          type: integer
+          minimum: 1
+
+    CreateSectorDto:
+      allOf:
+        - $ref: '#/components/schemas/SectorBaseDto'
+        - type: object
+          required:
+            - eventId
+            - name
+            - capacity
+
+    UpdateSectorDto:
+      allOf:
+        - $ref: '#/components/schemas/SectorBaseDto'
+
+    SectorDto:
+      allOf:
+        - $ref: '#/components/schemas/ArchivableDto'
+        - $ref: '#/components/schemas/SectorBaseDto'
+
+    # --- BATCHES ---
+
+    BatchBaseDto:
+      type: object
+      properties:
+        eventId:
+          type: integer
+          format: int64
+          description: ID del evento asociado (SimpleEvent)
+        name:
+          type: string
+          maxLength: 100
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+
+    CreateBatchDto:
+      allOf:
+        - $ref: '#/components/schemas/BatchBaseDto'
+        - type: object
+          required:
+            - eventId
+            - name
+            - startDate
+            - endDate
+
+    UpdateBatchDto:
+      allOf:
+        - $ref: '#/components/schemas/BatchBaseDto'
+
+    BatchDto:
+      allOf:
+        - $ref: '#/components/schemas/ArchivableDto'
+        - $ref: '#/components/schemas/BatchBaseDto'
+
+    # --- PRECIOS POR SECTOR Y BATCH (tabla intermedia) ---
+
+    SectorByBatchBaseDto:
+      type: object
+      properties:
+        sectorId:
+          type: integer
+          format: int64
+        batchId:
+          type: integer
+          format: int64
+        price:
+          type: integer
+          minimum: 1
+        quantity:
+          type: integer
+          minimum: 1
+
+    CreateSectorByBatchDto:
+      allOf:
+        - $ref: '#/components/schemas/SectorByBatchBaseDto'
+        - type: object
+          required:
+            - sectorId
+            - batchId
+            - price
+            - quantity
+
+    SectorByBatchDto:
+      allOf:
+        - $ref: '#/components/schemas/ArchivableDto'
+        - $ref: '#/components/schemas/SectorByBatchBaseDto'
+
+    # --- COMPRAS ---
+    # total y date los calcula el backend, por eso no van en Create
+
+    BuyBaseDto:
+      type: object
+      properties:
+        eventId:
+          type: integer
+          format: int64
+          description: ID del evento asociado (SimpleEvent)
+        userId:
+          type: integer
+          format: int64
+
+    CreateBuyDto:
+      allOf:
+        - $ref: '#/components/schemas/BuyBaseDto'
+        - type: object
+          required:
+            - eventId
+            - userId
+
+    BuyDto:
+      allOf:
+        - $ref: '#/components/schemas/ArchivableDto'
+        - $ref: '#/components/schemas/BuyBaseDto'
         - type: object
           properties:
-            sectorByBatchId:
+            total:
               type: integer
-              format: int64
-            buyId:
-              type: integer
-              format: int64
-              description: ID de la compra asociada (Buy)
+              minimum: 1
+              description: Calculado por el backend a partir de los tickets
+            date:
+              type: string
+              format: partial-time
+              example: "20:00:00"
+              description: Momento de la compra, lo define el backend
+
+    # --- TICKETS ---
+    # qrToken lo genera el backend, por eso no va en Create
+
+    TicketBaseDto:
+      type: object
+      properties:
+        sectorByBatchId:
+          type: integer
+          format: int64
+        buyId:
+          type: integer
+          format: int64
+          description: ID de la compra asociada (Buy)
+
+    CreateTicketDto:
+      allOf:
+        - $ref: '#/components/schemas/TicketBaseDto'
+        - type: object
+          required:
+            - sectorByBatchId
+            - buyId
+
+    TicketDto:
+      allOf:
+        - $ref: '#/components/schemas/ArchivableDto'
+        - $ref: '#/components/schemas/TicketBaseDto'
+        - type: object
+          properties:
             qrToken:
               type: string
+              description: Generado por el backend
+
+    # --- MANAGERS DE EVENTO (tabla intermedia) ---
+
+    EventManagerBaseDto:
+      type: object
+      properties:
+        managerId:
+          type: integer
+          format: int64
+        eventId:
+          type: integer
+          format: int64
+        assignedAt:
+          type: string
+          format: date
 
     CreateEventManagerDto:
       allOf:
-        - $ref: '#/components/schemas/IdentificableDto'
+        - $ref: '#/components/schemas/EventManagerBaseDto'
         - type: object
           required:
             - managerId
             - eventId
             - assignedAt
-          properties:
-            managerId:
-              type: integer
-              format: int64
-            eventId:
-              type: integer
-              format: int64
-            assignedAt:
-              type: string
-              format: date
 
     EventManagerDto:
       allOf:
-        - $ref: '#/components/schemas/IdentificableDto'
-        - $ref: '#/components/schemas/CreateUserInterestDto'
-        - type: object
+        - $ref: '#/components/schemas/ArchivableDto'
+        - $ref: '#/components/schemas/EventManagerBaseDto'
+
+    # --- INTERESES DEL USUARIO (tabla intermedia) ---
+
+    UserInterestBaseDto:
+      type: object
+      properties:
+        userId:
+          type: integer
+          format: int64
+        categoryId:
+          type: integer
+          format: int64
+        markedAt:
+          type: string
+          format: date
 
     CreateUserInterestDto:
       allOf:
+        - $ref: '#/components/schemas/UserInterestBaseDto'
         - type: object
           required:
             - userId
             - categoryId
             - markedAt
-          properties:
-            userId:
-              type: integer
-              format: int64
-            categoryId:
-              type: integer
-              format: int64
-            markedAt:
-              type: string
-              format: date
+
     UserInterestDto:
       allOf:
-        - $ref: '#/components/schemas/IdentificableDto'
-        - $ref: '#/components/schemas/CreateUserInterestDto'
-        - type: object
+        - $ref: '#/components/schemas/ArchivableDto'
+        - $ref: '#/components/schemas/UserInterestBaseDto'

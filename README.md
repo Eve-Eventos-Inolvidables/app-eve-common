@@ -116,7 +116,32 @@ public EventCategoryDto update(Long id, UpdateEventCategoryDto dto) {
 
 `archived`, `id` y cualquier campo que el DTO de update no declare se conservan solos. Si en cambio hacés `toEntity(dto)` + `setId(id)` + `save(...)`, el merge reemplaza la fila completa y esos campos vuelven al default (por ejemplo `archived = false`, que des-archivaría el recurso).
 
-## 7. Parámetro `sort` del `PagedFilter`
+## 7. Los DTOs (`openapi/api.yaml`)
+
+Cada entidad tiene cuatro piezas, generadas desde `src/main/resources/openapi/api.yaml` al compilar:
+
+| Schema | Para qué | Validación |
+|---|---|---|
+| `XBaseDto` | Properties de la entidad, **sin `id` ni `archived`** | ninguna |
+| `CreateXDto` | `XBaseDto` + `required` | `@NotNull` + `@Size`/`@Email` |
+| `UpdateXDto` | `XBaseDto` sola | ninguna (todo opcional) |
+| `XDto` | Lectura: `ArchivableDto` + `XBaseDto` | ninguna (es respuesta, no entrada) |
+
+Consecuencias de la convención:
+
+- Los `Create*Dto` no llevan `id`: el backend lo asigna.
+- Ningún `XDto` de lectura tiene `@NotNull`, así que un recurso con campos incompletos no rompe la deserialización de la respuesta.
+- Los campos que calcula el backend (`Buy.total`, `Buy.date`, `Ticket.qrToken`) están **solo en el DTO de lectura**, no en el `Create`.
+- `Update*Dto` existe solo para los recursos que se editan (`Role`, `User`, `EventCategory`, `SimpleEvent`, `Sector`, `Batch`). Lo que se origina al comprar o al relacionar (`Buy`, `Ticket`, `SectorByBatch`, `EventManager`, `UserInterest`) tiene `Create` y nada más: se crean, se archivan, no se parchean.
+- Todos los `XDto` extienden `ArchivableDto` porque con la unificación **toda** entidad es soft delete.
+
+⚠️ **Trampa de tipos**: `kickOffTime` (`SimpleEventBaseDto`) y `BuyDto.date` están declarados con `format: partial-time`, pero el openapi-generator 7.8.0 no los mapea a `LocalTime` y los genera como `String`. Las entidades usan `LocalTime`, así que hay que convertir a mano en `toDto`/`toEntity`:
+
+```java
+e.setKickOffTime(LocalTime.parse(dto.getKickOffTime()));   // String -> LocalTime
+```
+
+## 8. Parámetro `sort` del `PagedFilter`
 
 `sort` acepta `campo` o `campo desc`, separados por coma o espacio. `desc` es el único valor que invierte el orden; cualquier otro token se toma como ascendente.
 
@@ -141,7 +166,7 @@ GET /api/event-categories?page=0&size=20&sort=name,desc
 
 Dos cosas a tener en cuenta: `sort` **no se valida contra una whitelist**, así que un campo inexistente lanza `PropertyReferenceException`, que el `GlobalExceptionHandler` mapea a **500** y no a 400. Y como no hay segundo criterio de desempate, conviene paginar con `sort=id desc`.
 
-## 8. Actualizar la librería
+## 9. Actualizar la librería
 
 ```bash
 git pull
