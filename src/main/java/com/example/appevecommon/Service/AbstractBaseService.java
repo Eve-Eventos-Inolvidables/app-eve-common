@@ -16,15 +16,16 @@ import java.util.function.Consumer;
 public abstract class AbstractBaseService<
         E extends BaseEntity,
         D,
+        M extends BaseMapper<E,D>,
         F extends PagedFilter>
         implements IBaseService<E, D, F> {
 
     private static final int DEFAULT_SIZE = 20;
 
     protected final IBaseRepository<E> repository;
-    protected final BaseMapper<E,D> mapper;
+    protected final M mapper;
 
-    protected AbstractBaseService(IBaseRepository<E> repository, BaseMapper<E,D> mapper) {
+    protected AbstractBaseService(IBaseRepository<E> repository,M mapper) {
         this.repository = repository;
         this.mapper = mapper;
     }

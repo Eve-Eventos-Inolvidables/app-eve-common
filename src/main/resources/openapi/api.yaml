@@ -28,6 +28,7 @@ components:
     # --- ENVELOPE ---
     # Los controllers devuelven Response<T>, no el DTO pelado.
     # ResponseBaseDto va sin 'data' a proposito: cada recurso lo compone con allOf.
+    # 'pagination' solo aparece en los endpoints paginados.
 
     ResponseBaseDto:
       type: object
@@ -37,15 +38,12 @@ components:
           example: true
         message:
           type: string
-          example: "Operación exitosa"
+        pagination:
+          $ref: '#/components/schemas/PaginationDto'
 
-    PagedResultDto:
+    PaginationDto:
       type: object
       properties:
-        items:
-          type: array
-          items:
-            type: object
         page:
           type: integer
           example: 0

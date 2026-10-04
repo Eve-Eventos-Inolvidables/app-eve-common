@@ -3,8 +3,8 @@ package com.example.appevecommon.Controller;
 import com.example.appevecommon.Models.Base.BaseEntity;
 import com.example.appevecommon.Service.AbstractBaseService;
 import com.example.appevecommon.Service.Exception.ResourceNotFoundException;
+import com.example.appevecommon.Service.Utilities.BaseMapper;
 import com.example.appevecommon.Service.Utilities.PagedFilter;
-import com.example.appevecommon.Service.Utilities.Responses.PageResult;
 import com.example.appevecommon.Service.Utilities.Responses.Response;
 import com.example.appevecommon.Service.Utilities.Responses.ResponseFactory;
 import jakarta.validation.Valid;
@@ -23,7 +23,8 @@ import java.util.List;
 public abstract class BaseController<E extends BaseEntity,
         D,
         F extends PagedFilter,
-        S extends AbstractBaseService<E, D, F>> {
+        M extends BaseMapper<E,D>,
+        S extends AbstractBaseService<E, D,M, F>> {
 
     protected final S service;
 
@@ -51,7 +52,7 @@ public abstract class BaseController<E extends BaseEntity,
 //    }
 
     @GetMapping
-    public Response<PageResult<D>> getByFilter(@ModelAttribute F filter) {
+    public Response<List<D>> getByFilter(@ModelAttribute F filter) {
         return ResponseFactory.ok(service.getByFilter(filter));
     }
 
