@@ -5,6 +5,7 @@ import com.example.appevecommon.Service.AbstractBaseService;
 import com.example.appevecommon.Service.Exception.ResourceNotFoundException;
 import com.example.appevecommon.Service.Utilities.BaseMapper;
 import com.example.appevecommon.Service.Utilities.PagedFilter;
+import com.example.appevecommon.Service.Utilities.Responses.PageResult;
 import com.example.appevecommon.Service.Utilities.Responses.Response;
 import com.example.appevecommon.Service.Utilities.Responses.ResponseFactory;
 import jakarta.validation.Valid;
@@ -52,7 +53,7 @@ public abstract class BaseController<E extends BaseEntity,
 //    }
 
     @GetMapping
-    public Response<List<D>> getByFilter(@ModelAttribute F filter) {
+    public Response<PageResult<D>> getByFilter(@ModelAttribute F filter) {
         return ResponseFactory.ok(service.getByFilter(filter));
     }
 

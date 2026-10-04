@@ -18,8 +18,8 @@ public final class ResponseFactory {
         return new Response<>(true, message, data);
     }
 
-    public static <T> Response<List<T>> ok(PageResult<T> data) {
-        return new Response<>(true, null, data.items(), data.pagination());
+    public static <T> Response<PageResult<T>> ok(PageResult<T> data) {
+        return new Response<>(true, null, data);
     }
 
     //NOT OK
