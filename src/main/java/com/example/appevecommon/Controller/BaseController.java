@@ -32,20 +32,10 @@ public abstract class BaseController<E extends BaseEntity,
         this.service = service;
     }
 
-//    @PostMapping
-//    public Response<D> create(@Valid @RequestBody D dto) {
-//        return ResponseFactory.ok("Recurso creado exitosamente", service.create(dto));
-//    }
-
     @GetMapping("/{id}")
     public Response<D> getById(@PathVariable Long id) {
         return ResponseFactory.ok(service.getById(id));
     }
-
-//    @PutMapping("/{id}")
-//    public Response<D> update(@PathVariable Long id, @Valid @RequestBody D dto) {
-//        return ResponseFactory.ok("Recurso actualizado exitosamente", service.update(id, dto));
-//    }
 
     @DeleteMapping("/{id}")
     public Response<Void> delete(@PathVariable Long id) {
@@ -55,13 +45,24 @@ public abstract class BaseController<E extends BaseEntity,
         return ResponseFactory.ok("Recurso eliminado exitosamente", null);
     }
 
-    @GetMapping("/all")
-    public Response<List<D>> getAll() {
-        return ResponseFactory.ok(service.getAll());
-    }
+//    @GetMapping("/all")
+//    public Response<List<D>> getAll() {
+//        return ResponseFactory.ok(service.getAll());
+//    }
 
     @GetMapping
     public Response<PageResult<D>> getByFilter(@ModelAttribute F filter) {
         return ResponseFactory.ok(service.getByFilter(filter));
     }
+
+
+    //    @PutMapping("/{id}")
+//    public Response<D> update(@PathVariable Long id, @Valid @RequestBody D dto) {
+//        return ResponseFactory.ok("Recurso actualizado exitosamente", service.update(id, dto));
+//    }
+
+    //    @PostMapping
+//    public Response<D> create(@Valid @RequestBody D dto) {
+//        return ResponseFactory.ok("Recurso creado exitosamente", service.create(dto));
+//    }
 }

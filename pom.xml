@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.example</groupId>
     <artifactId>app-eve-common</artifactId>
-    <version>0.1.1</version>
+    <version>0.2.0</version>
     <name>app-eve-common</name>
     <description>app-eve-common</description>
     <url/>

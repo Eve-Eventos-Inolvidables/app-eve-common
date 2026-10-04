@@ -25,6 +25,50 @@ components:
               type: boolean
               default: false
 
+    # --- ENVELOPE ---
+    # Los controllers devuelven Response<T>, no el DTO pelado.
+    # ResponseBaseDto va sin 'data' a proposito: cada recurso lo compone con allOf.
+
+    ResponseBaseDto:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Operación exitosa"
+
+    PagedResultDto:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+        page:
+          type: integer
+          example: 0
+        size:
+          type: integer
+          example: 20
+        totalItems:
+          type: integer
+          format: int64
+          example: 100
+        totalPages:
+          type: integer
+          example: 5
+
+    ErrorResponseDto:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+        message:
+          type: string
+
     # --- PATRON ---
     # Por entidad se generan cuatro piezas:
     #   XBaseDto    -> properties, todas opcionales, SIN id/archived (son de lectura)
@@ -72,9 +116,7 @@ components:
           type: string
           format: email
           maxLength: 150
-        password:
-          type: string
-          maxLength: 255
+
 
     CreateUserDto:
       allOf:
@@ -85,10 +127,21 @@ components:
             - name
             - email
             - password
+          properties:
+            password:
+              type: string
+              maxLength: 255
 
     UpdateUserDto:
       allOf:
         - $ref: '#/components/schemas/UserBaseDto'
+        - type: object
+          properties:
+            password:
+              type: string
+              maxLength: 255
+
+
 
     UserDto:
       allOf:

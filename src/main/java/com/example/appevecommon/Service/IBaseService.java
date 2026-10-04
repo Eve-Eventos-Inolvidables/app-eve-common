@@ -5,19 +5,18 @@ import com.example.appevecommon.Service.Utilities.PagedFilter;
 import com.example.appevecommon.Service.Utilities.Responses.PageResult;
 
 import java.util.List;
-//Los services concretos eligen la base según la entidad. Cuando haya controllers, sigue el @RestControllerAdvice para mapear excepciones al mismo formato.
-public interface IBaseService<E extends BaseEntity, D, F extends PagedFilter> { //D = DTO F = Filter
-    //CRUD
+
+public interface IBaseService<
+        E extends BaseEntity,
+        D,
+        F extends PagedFilter>
+{ //D = DTO F = Filter
+
     D getById(Long id);
     E getEntity(Long id) ;
 
-    //SOFT DELETE: archiva la fila en vez de eliminarla
+    //SOFT DELETE
     boolean delete(Long id);
-
-    //!!!USE ONLY WITH SMALL VOLUME TABLES
-    default List<D> getAll() {
-        throw new UnsupportedOperationException("getAll() no implementado");
-    }
 
     //Paged with optional filter
     default PageResult<D> getByFilter(F filter) {
