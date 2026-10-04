@@ -4,14 +4,13 @@ import com.example.appevecommon.Models.Base.BaseEntity;
 import com.example.appevecommon.Repository.IBaseRepository;
 import com.example.appevecommon.Service.Utilities.BaseMapper;
 import com.example.appevecommon.Service.Utilities.PagedFilter;
-import com.example.appevecommon.Service.Utilities.Responses.PageResult;
+import com.example.appevecommon.Service.Utilities.Responses.Ok.PageResult;
 import com.example.appevecommon.Service.Exception.ResourceNotFoundException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
-import java.util.function.Consumer;
 
 public abstract class AbstractBaseService<
         E extends BaseEntity,
@@ -64,7 +63,7 @@ public abstract class AbstractBaseService<
         return true;
     }
 
-    //if you want to implement getall, do it in an specific implementation
+    //if you want to implement getall, do it in a  specific implementation
     List<D> getAll() {
         throw new UnsupportedOperationException("getAll() no implementado");
     }

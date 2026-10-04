@@ -1,5 +1,6 @@
-package com.example.appevecommon.Service.Utilities.Responses;
+package com.example.appevecommon.Service.Utilities.Responses.Ok;
 
+import com.example.appevecommon.Service.Utilities.Responses.Pagination;
 import org.springframework.data.domain.Page;
 
 import java.util.List;

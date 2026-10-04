@@ -5,20 +5,15 @@ import com.example.appevecommon.Service.AbstractBaseService;
 import com.example.appevecommon.Service.Exception.ResourceNotFoundException;
 import com.example.appevecommon.Service.Utilities.BaseMapper;
 import com.example.appevecommon.Service.Utilities.PagedFilter;
-import com.example.appevecommon.Service.Utilities.Responses.PageResult;
+import com.example.appevecommon.Service.Utilities.Responses.Ok.PagedResponse;
 import com.example.appevecommon.Service.Utilities.Responses.Response;
 import com.example.appevecommon.Service.Utilities.Responses.ResponseFactory;
-import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 public abstract class BaseController<E extends BaseEntity,
@@ -40,11 +35,11 @@ public abstract class BaseController<E extends BaseEntity,
     }
 
     @DeleteMapping("/{id}")
-    public Response<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         if (!service.delete(id)) {
             throw new ResourceNotFoundException(id);
         }
-        return ResponseFactory.ok("Recurso eliminado exitosamente", null);
+        return ResponseFactory.noContent();
     }
 
 //    @GetMapping("/all")
@@ -53,7 +48,7 @@ public abstract class BaseController<E extends BaseEntity,
 //    }
 
     @GetMapping
-    public Response<PageResult<D>> getByFilter(@ModelAttribute F filter) {
+    public PagedResponse<D> getByFilter(@ModelAttribute F filter) {
         return ResponseFactory.ok(service.getByFilter(filter));
     }
 

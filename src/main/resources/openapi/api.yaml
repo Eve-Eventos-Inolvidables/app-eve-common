@@ -26,26 +26,112 @@ components:
               default: false
 
     # --- ENVELOPE ---
-    # Los controllers devuelven Response<T>, no el DTO pelado.
-    # ResponseBaseDto va sin 'data' a proposito: cada recurso lo compone con allOf.
-    # 'pagination' solo aparece en los endpoints paginados.
+    # Hay un schema por forma de respuesta, NO un envelope mega. Es deliberado: springdoc
+    # deriva el schema del tipo de retorno declarado, asi que si los endpoints declararan
+    # un unico tipo con todos los campos, Swagger mostraria en cada endpoint campos
+    # (error, pagination) que ese endpoint nunca manda.
+    #
+    # Cada endpoint declara el suyo:
+    #   ResponseDto      -> 200 con un recurso      (getById, create, update)
+    #   PagedResponseDto -> 200 con listado paginado (getByFilter)
+    #   ErrorResponseDto -> 4xx/5xx con detalle
+    #   y el delete devuelve 204 sin body, asi que no tiene schema.
+    #
+    # En las 3 formas 'success' y 'message' estan garantizados (required). Los campos
+    # opcionales se omiten del JSON cuando no aplican (@JsonInclude(NON_NULL)): no mandes
+    # null explicito, chequea que la clave exista.
+    #
+    # Estas schemas no se usan como clases Java (este spec tiene paths: {} y solo genera
+    # DTOs de entidad): viven aca como contrato de cable, para que cada microservicio las
+    # copie a su propio spec si quiere generar el cliente.
 
-    ResponseBaseDto:
+    ResponseDto:
       type: object
+      required:
+        - success
+        - message
       properties:
         success:
           type: boolean
           example: true
         message:
           type: string
+          description: Motivo del exito.
+          example: Operación exitosa
+        data:
+          type: object
+          additionalProperties: true
+          description: >-
+            El recurso. Sin forma fija aca: cada endpoint lo tipa con allOf
+            (ej. `data: {$ref: EventCategoryDto}`).
+          nullable: true
+
+    PagedResponseDto:
+      type: object
+      required:
+        - success
+        - message
+        - data
+        - pagination
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: Operación exitosa
+        data:
+          type: array
+          description: >-
+            Los items de la pagina. Sin forma fija aca: cada endpoint lo tipa con allOf.
+          items:
+            type: object
+            additionalProperties: true
         pagination:
           $ref: '#/components/schemas/PaginationDto'
 
+    ErrorResponseDto:
+      type: object
+      required:
+        - success
+        - message
+        - error
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+          description: Categoria del error.
+          example: Recurso no encontrado
+        error:
+          $ref: '#/components/schemas/ErrorDetailDto'
+
+    ErrorDetailDto:
+      type: object
+      required:
+        - statusCode
+        - message
+      properties:
+        statusCode:
+          type: integer
+          description: Siempre igual al status HTTP de la respuesta.
+          example: 404
+        message:
+          type: string
+          description: Detalle del fallo. En el 500 puede exponer la causa real (util para debug).
+
     PaginationDto:
       type: object
+      required:
+        - page
+        - size
+        - totalItems
+        - totalPages
       properties:
         page:
           type: integer
+          description: Indice de pagina, base 0 (el mismo `page` que se manda como query param).
           example: 0
         size:
           type: integer
@@ -58,21 +144,12 @@ components:
           type: integer
           example: 5
 
-    ErrorResponseDto:
-      type: object
-      properties:
-        statusCode:
-          type: integer
-          example: 404
-        message:
-          type: string
-
     # --- PATRON ---
     # Por entidad se generan cuatro piezas:
-    #   XBaseDto    -> properties, todas opcionales, SIN id/archived (son de lectura)
-    #   CreateXDto  -> XBaseDto + required
-    #   UpdateXDto  -> XBaseDto sola (todo opcional), solo en recursos que se editan
-    #   XDto        -> ArchivableDto + XBaseDto, mas los campos que calcula el backend
+    #   XBaseDto   properties, todas opcionales, SIN id/archived (son de lectura)
+    #   CreateXDto   XBaseDto + required
+    #   UpdateXDto  XBaseDto sola (todo opcional), solo en recursos que se editan
+    #   XDto       ArchivableDto + XBaseDto, mas los campos que calcula el backend
 
     # --- ROLES ---
 

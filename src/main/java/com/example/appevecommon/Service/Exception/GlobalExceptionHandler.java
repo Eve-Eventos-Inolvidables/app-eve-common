@@ -1,7 +1,6 @@
 package com.example.appevecommon.Service.Exception;
 
-import com.example.appevecommon.Service.Utilities.Responses.ErrorResponse;
-import com.example.appevecommon.Service.Utilities.Responses.Response;
+import com.example.appevecommon.Service.Utilities.Responses.Error.ErrorResponse;
 import com.example.appevecommon.Service.Utilities.Responses.ResponseFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -16,26 +15,23 @@ import java.util.stream.Collectors;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<Response<ErrorResponse>> handleResourceNotFound(ResourceNotFoundException ex) {
-        return build(404,"Recurso no encontrado", ex.getMessage());
+    public ResponseEntity<ErrorResponse> handleResourceNotFound(ResourceNotFoundException ex) {
+        return ResponseFactory.notFound(ex.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Response<ErrorResponse>> handleValidation(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ErrorResponse> handleValidation(MethodArgumentNotValidException ex) {
         String message = ex.getBindingResult().getFieldErrors().stream()
                 .map(error -> error.getField() + ": " + error.getDefaultMessage())
                 .collect(Collectors.joining("; "));
-        return build(400,"Mala petición", message);
+        return ResponseFactory.badRequest("Mala petición", message);
     }
 
+    // El mensaje se expone a proposito: en desarrollo es lo que sirve para debugear.
+    // Si en produccion se quiere ocultar, se reemplaza por un mensaje opaco aqui.
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Response<ErrorResponse>> handleGeneric(Exception ex) {
+    public ResponseEntity<ErrorResponse> handleGeneric(Exception ex) {
         log.error("Error no manejado", ex);
-        return build(500,"Error interno del servidor", ex.getMessage());
-    }
-
-    // PRIVATE ------------------------------------------------------------------------------------
-    private ResponseEntity<Response<ErrorResponse>> build(int statusCode, String responseMessage, String errorMessage) {
-        return ResponseEntity.status(statusCode).body(ResponseFactory.error(statusCode, responseMessage, errorMessage));
+        return ResponseFactory.error("Error interno del servidor", ex.getMessage());
     }
 }

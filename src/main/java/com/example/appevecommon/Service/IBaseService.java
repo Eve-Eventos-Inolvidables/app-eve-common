@@ -2,9 +2,7 @@ package com.example.appevecommon.Service;
 
 import com.example.appevecommon.Models.Base.BaseEntity;
 import com.example.appevecommon.Service.Utilities.PagedFilter;
-import com.example.appevecommon.Service.Utilities.Responses.PageResult;
-
-import java.util.List;
+import com.example.appevecommon.Service.Utilities.Responses.Ok.PageResult;
 
 public interface IBaseService<
         E extends BaseEntity,

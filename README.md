@@ -166,7 +166,42 @@ GET /api/event-categories?page=0&size=20&sort=name,desc
 
 Dos cosas a tener en cuenta: `sort` **no se valida contra una whitelist**, así que un campo inexistente lanza `PropertyReferenceException`, que el `GlobalExceptionHandler` mapea a **500** y no a 400. Y como no hay segundo criterio de desempate, conviene paginar con `sort=id desc`.
 
-## 9. Actualizar la librería
+## 9. El envelope de respuesta
+
+Los controllers no devuelven el DTO pelado: devuelven un envelope. Hay **un tipo por forma de respuesta**, no un envelope mega con todos los campos.
+
+| Endpoint | Status | Tipo | JSON |
+|---|---|---|---|
+| `getById`, `create`, `update` | 200 | `Response<T>` | `{success, message, data}` |
+| `getByFilter` | 200 | `PagedResponse<T>` | `{success, message, data[], pagination}` |
+| `delete` | 204 | — | sin body |
+| errores | 4xx/5xx | `ErrorResponse` | `{success, message, error{statusCode, message}}` |
+
+```jsonc
+// GET /api/event-categories/1
+{"success":true,"message":"Operación exitosa","data":{"id":1,"name":"Rock","archived":false}}
+
+// GET /api/event-categories?page=0&size=20&sort=name+asc
+{"success":true,"message":"Operación exitosa","data":[...],"pagination":{"page":0,"size":20,"totalItems":100,"totalPages":5}}
+
+// 404
+{"success":false,"message":"Recurso no encontrado","error":{"statusCode":404,"message":"No existe EventCategory con id=99"}}
+```
+
+**Por qué un tipo por forma y no uno solo:** springdoc deriva el schema del *tipo de retorno declarado*. Con un único `Response<T>` de 5 campos opcionales, Swagger muestra los 5 en cada endpoint —incluidos `error` y `pagination` en los que nunca se emiten. Al partirlo, cada endpoint declara su forma y su schema muestra solo lo que ese endpoint manda. `@JsonInclude(NON_NULL)` limpia el JSON en runtime pero **no** influye en el schema, así que no raggiunge.
+
+Cuatro reglas para no romper el contrato:
+
+- **`success` y `message` están siempre** (son `required`). Los campos opcionales se omiten del JSON cuando no aplican: no mandes `null` explícito, chequeá que la clave exista.
+- **`pagination` es plano, no va anidado en `data`.** Los items van en `data` como array pelado y la paginación sube al nivel superior. El tipo parametrizado de `PagedResponse` es el item, no `List<Dto>`, para que el schema exponga el tipo real del recurso.
+- **`error.statusCode` siempre coincide con el status HTTP.** No es una convención: los factories de error devuelven `ResponseEntity<ErrorResponse>` y arman el body en la misma llamada, así que no pueden desincronizarse. Por eso los de éxito devuelven el envelope pelado — el éxito no tiene status que elegir.
+- **El 500 expone el mensaje de la excepción a propósito**, para debug. Si en producción querés ocultarlo, cambialo en `GlobalExceptionHandler.handleGeneric`.
+
+`ResponseFactory.ok(PageResult<T>)` aplana el `PageResult` del service, así que `BaseController.getByFilter` devuelve `PagedResponse<D>` aunque `AbstractBaseService.getByFilter` siga devolviendo `PageResult<D>`: la paginación no se toca en la capa de service, solo en el borde HTTP.
+
+Para un status de éxito que no tiene factory (201, 202), no agregues un método: `ResponseEntity.status(201).body(ResponseFactory.ok(dto))`.
+
+## 10. Actualizar la librería
 
 ```bash
 git pull
