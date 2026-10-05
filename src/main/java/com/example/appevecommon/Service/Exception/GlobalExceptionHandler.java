@@ -28,7 +28,7 @@ public class GlobalExceptionHandler {
     }
 
     // El mensaje se expone a proposito: en desarrollo es lo que sirve para debugear.
-    // Si en produccion se quiere ocultar, se reemplaza por un mensaje opaco aqui.
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneric(Exception ex) {
         log.error("Error no manejado", ex);

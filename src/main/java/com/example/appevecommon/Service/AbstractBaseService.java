@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public abstract class AbstractBaseService<
         E extends BaseEntity,
@@ -31,17 +32,17 @@ public abstract class AbstractBaseService<
 
     public abstract Specification<E> toSpecification(F filter);
 
-//    /**
-//     * Loads the entity, applies the changes and saves it.
-//     * Used by update() so untouched columns (id, archived, and any other
-//     * server-owned field) keep their current values. NEVER rebuild the entity
-//     * with toEntity() inside an update: that is a full replace and resets them.
-//     */
-//    protected E patch(Long id, Consumer<E> changes) {
-//        E entity = getEntity(id);
-//        changes.accept(entity);
-//        return repository.save(entity);
-//    }
+    /**
+     * Loads the entity, applies the changes and saves it.
+     * Used by update() so untouched columns (id, archived, and any other
+     * server-owned field) keep their current values. NEVER rebuild the entity
+     * with toEntity() inside an update: that is a full replace and resets them.
+     */
+    protected E patch(Long id, Consumer<E> changes) {
+        E entity = getEntity(id);
+        changes.accept(entity);
+        return repository.save(entity);
+    }
 
     @Override
     public E getEntity(Long id) {
@@ -64,7 +65,7 @@ public abstract class AbstractBaseService<
     }
 
     //if you want to implement getall, do it in a  specific implementation
-    List<D> getAll() {
+    public List<D> getAll() {
         throw new UnsupportedOperationException("getAll() no implementado");
     }
 

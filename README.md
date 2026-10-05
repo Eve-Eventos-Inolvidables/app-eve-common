@@ -210,6 +210,29 @@ mvn install
 
 Reinstalala cada vez que haya cambios en `main` y rebuilda tu microservicio.
 
+## 11. Migración a la 0.2.2: el service ahora pide su mapper
+
+`AbstractBaseService` pasó a requerir el mapper en el constructor:
+
+```java
+// antes
+super(repository)
+
+// ahora
+super(repository, mapper)
+```
+
+**Los microservicios no compilan hasta que cada service concreto pase su mapper.** Es un error de compilación, no de arranque, así que aparece en el primer build:
+
+```
+constructor AbstractBaseService ... required: IBaseRepository<E>,M
+                                 found:    IBaseRepository<EventCategory>
+```
+
+MapStruct ya está en el classpath, pero **`BaseMapper` todavía NO es un `@Mapper`**: sigue siendo una clase abstracta con `toDto` a mano, y el processor no genera nada. Por eso el `mapper` hay que pasarlo explícitamente y todavía se puede seguir usando una implementación manual.
+
+Cuando se cablee MapStruct de verdad, faltará `componentModel = "spring"` (o el `-Amapstruct.defaultComponentModel=spring`): con el default, el `…Impl` que genera el processor no es bean de Spring y el `mapper` no se va a poder inyectar. Cada microservicio que declare un `@Mapper` necesita su propia copia de `annotationProcessorPaths` con `mapstruct-processor` **y** `lombok-mapstruct-binding`, en ese orden.
+
 ## Notas de seguridad
 
 El archivo `src/main/resources/config/private.properties` (credenciales de Supabase) **no se incluye** en el jar: cada microservicio configura su propia conexión con sus credenciales.
