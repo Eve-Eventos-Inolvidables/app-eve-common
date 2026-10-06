@@ -38,7 +38,7 @@ Con solo agregar la dependencia, la auto-configuración de la librería registra
 - **Entidades compartidas** (`com.example.appevecommon.Models.*`): `SimpleEvent`, `User`, `Batch`, `Sector`, `EventCategory`, `Buy`, `Ticket`, etc.
 - **Manejo de errores común**: `GlobalExceptionHandler` + formato `Response`.
 - **DTOs** generados por OpenAPI (`org.openapitools.model.*`).
-- Clases base para implementar tus capas: `IBaseRepository`, `IBaseService`, `AbstractBaseService`, `BaseController`, `PagedFilter`, `PageResult`, `ResponseFactory`.
+- Clases base para implementar tus capas: `IBaseRepository`, `IBaseService`, `AbstractBaseService`, `BaseController`, `ReadableMapper`, `UpdatableMapper`, `MapperBase`, `PagedFilter`, `PageResult`, `ResponseFactory`.
 
 ## 4. Qué debés implementar en tu microservicio
 
@@ -101,20 +101,39 @@ Consecuencia a tener en cuenta: el `@SQLRestriction` **se propaga a las asociaci
 
 ## 6. Cómo escribir un `update`
 
-La base no impone `create`/`update`: cada service los declara con sus propios DTOs. La regla para no romper datos:
-
-**`toEntity(dto)` es únicamente para `create`. En un `update`, nunca reconstruyas la entidad desde cero** — usá `patch()`, que carga la entidad, le aplica solo los cambios y la guarda:
+`AbstractBaseService` ya trae el `update` hecho: solo declarás el mapper y el service hereda el método.
 
 ```java
 @Override
 public EventCategoryDto update(Long id, UpdateEventCategoryDto dto) {
-    return toDto(patch(id, e -> {
-        e.setName(dto.getName());
-    }));
+    return toDto(patch(id, e -> mapper.updateEntityFromDto(dto, e)));
 }
 ```
 
-`archived`, `id` y cualquier campo que el DTO de update no declare se conservan solos. Si en cambio hacés `toEntity(dto)` + `setId(id)` + `save(...)`, el merge reemplaza la fila completa y esos campos vuelven al default (por ejemplo `archived = false`, que des-archivaría el recurso).
+`update` es `@Transactional`: carga la entidad, le aplica el DTO y devuelve el `XDto` ya re-mapeado. No hace falta escribir el `patch(...)` a mano ni reconstruye la entidad, así que `id`, `archived` y los campos que el DTO no declara se conservan solos.
+
+Los `Update*Dto` tienen todos sus campos opcionales, y el PATCH tiene solo **dos** estados:
+
+| En el body | Significa | Efecto |
+|---|---|---|
+| la clave **no está** | no tocar | conserva el valor actual |
+| `"campo": null` | no tocar | conserva el valor actual |
+| `"campo": "x"` | cambiar | pone `"x"` |
+
+`null` y ausente significan exactamente lo mismo. Sale de `NullValuePropertyMappingStrategy.IGNORE` en `UpdatableMapper`: MapStruct se saltea la property cuando el valor del DTO viene en `null`.
+
+```jsonc
+{"name": "Nuevo nombre"}              // solo cambia el nombre
+{"description": null}                 // no cambia la descripcion
+{"name": null, "description": "hola"} // no cambia el nombre, cambia la otra
+{"name": null, "description": null}   // no cambia nada
+```
+
+⚠️ **No se puede limpiar un campo por PATCH**: mandarle `null` no lo borra, lo ignora. Para vaciar un campo hay que usar `PUT` o un endpoint dedicado.
+
+⚠️ No reconstruyas la entidad a mano. `toEntity(dto)` + `setId(id)` + `save(...)` hace merge de la fila completa y `archived` vuelve al default, des-archivando el recurso.
+
+⚠️ Los DTOs de update **sí** validan largo y rango: al reusar `XBaseDto`, traen `@Size`/`@Min`/`@Email` como los de create. Con `@Valid` en el controller, un `{"name": "<80 caracteres>"}` se rechaza antes de tocar la base.
 
 ## 7. Los DTOs (`openapi/api.yaml`)
 
@@ -122,9 +141,9 @@ Cada entidad tiene cuatro piezas, generadas desde `src/main/resources/openapi/ap
 
 | Schema | Para qué | Validación |
 |---|---|---|
-| `XBaseDto` | Properties de la entidad, **sin `id` ni `archived`** | ninguna |
+| `XBaseDto` | Properties de la entidad, **sin `id` ni `archived`** | `@Size`/`@Min` de la property |
 | `CreateXDto` | `XBaseDto` + `required` | `@NotNull` + `@Size`/`@Email` |
-| `UpdateXDto` | `XBaseDto` sola | ninguna (todo opcional) |
+| `UpdateXDto` | `XBaseDto` sola, todo opcional | `@Size`/`@Min`/`@Email`, pero ninguno `required` |
 | `XDto` | Lectura: `ArchivableDto` + `XBaseDto` | ninguna (es respuesta, no entrada) |
 
 Consecuencias de la convención:
@@ -140,6 +159,8 @@ Consecuencias de la convención:
 ```java
 e.setKickOffTime(LocalTime.parse(dto.getKickOffTime()));   // String -> LocalTime
 ```
+
+Para no repetir esa conversión a mano, `MapperBase` trae `formatTime`/`parseTime`: alcanza con declarar el `@Mapper` sin `@Mapping` para ese campo y MapStruct los encadena solos.
 
 ## 8. Parámetro `sort` del `PagedFilter`
 
@@ -229,9 +250,36 @@ constructor AbstractBaseService ... required: IBaseRepository<E>,M
                                  found:    IBaseRepository<EventCategory>
 ```
 
-MapStruct ya está en el classpath, pero **`BaseMapper` todavía NO es un `@Mapper`**: sigue siendo una clase abstracta con `toDto` a mano, y el processor no genera nada. Por eso el `mapper` hay que pasarlo explícitamente y todavía se puede seguir usando una implementación manual.
+MapStruct ya está en el classpath, pero **`BaseMapper` todavía NO es un `@Mapper`**: no declara anotaciones de MapStruct y el processor no genera nada. Por eso el `mapper` hay que pasarlo explícitamente y todavía se puede seguir usando una implementación manual.
+
+`BaseMapper` hoy es una interface (`ReadableMapper` + `UpdatableMapper`) que solo define `toDto`, `toDtoList` y `updateEntityFromDto`. Un mapper concreto que la implemente tiene que sobrescribir `toDto`: si no, MapStruct no tiene con qué generarlo.
 
 Cuando se cablee MapStruct de verdad, faltará `componentModel = "spring"` (o el `-Amapstruct.defaultComponentModel=spring`): con el default, el `…Impl` que genera el processor no es bean de Spring y el `mapper` no se va a poder inyectar. Cada microservicio que declare un `@Mapper` necesita su propia copia de `annotationProcessorPaths` con `mapstruct-processor` **y** `lombok-mapstruct-binding`, en ese orden.
+
+### Relaciones en un `update`
+
+Para el sentido entidad → DTO, `MapperBase.idOf` resuelve la relación a su id:
+
+```java
+@Mapping(target = "categoryId", source = "eventCategory", qualifiedByName = "idOf")
+```
+
+En cambio, para el sentido DTO → entidad **no sirve**: el DTO trae `categoryId` (un `Long`) y `idOf` espera la entidad, no el id. Resolver un id a una entidad pide un repository, así que no puede ser genérico en la base y cada mapper concreto lo resuelve:
+
+```java
+@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+@Mapping(target = "eventCategory", ignore = true)   // o el resolver de tu repo
+@Mapping(target = "sectorList", ignore = true)       // listas: el update no las toca
+void updateEntityFromDto(UpdateSimpleEventDto dto, @MappingTarget SimpleEvent entity);
+```
+
+Los escalares no necesitan nada: con `IGNORE`, MapStruct genera el guard solo.
+
+```java
+if ( dto.getDescription() != null ) {
+    entity.setDescription( dto.getDescription() );
+}
+```
 
 ## Notas de seguridad
 

@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.example</groupId>
     <artifactId>app-eve-common</artifactId>
-    <version>0.2.3</version>
+    <version>0.2.4</version>
     <name>app-eve-common</name>
     <description>app-eve-common</description>
     <url/>
@@ -41,7 +41,6 @@
             <artifactId>spring-boot-starter-validation</artifactId>
             <version>4.2.0-M1</version>
         </dependency>
-
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -76,11 +75,7 @@
             <artifactId>spring-boot-starter-data-jpa-test</artifactId>
             <scope>test</scope>
         </dependency>
-<dependency>
-            <groupId>org.openapitools</groupId>
-            <artifactId>jackson-databind-nullable</artifactId>
-            <version>0.2.6</version>
-        </dependency>
+
     </dependencies>
 
     <build>
@@ -143,6 +138,7 @@
                                 <useLombok>true</useLombok>
                                 <library>spring-boot</library>
                                 <useSpringBoot3>true</useSpringBoot3>
+                                <openApiNullable>false</openApiNullable>
                             </configOptions>
                         </configuration>
                     </execution>

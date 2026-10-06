@@ -1,10 +1,9 @@
 package com.example.appevecommon.Controller;
 
 import com.example.appevecommon.Models.Base.BaseEntity;
-import com.example.appevecommon.Service.AbstractBaseService;
 import com.example.appevecommon.Service.Exception.ResourceNotFoundException;
-import com.example.appevecommon.Service.Utilities.BaseMapper;
-import com.example.appevecommon.Service.Utilities.PagedFilter;
+import com.example.appevecommon.Service.IBaseService;
+import com.example.appevecommon.Service.Utilities.Responses.PagedFilter;
 import com.example.appevecommon.Service.Utilities.Responses.Ok.PagedResponse;
 import com.example.appevecommon.Service.Utilities.Responses.Response;
 import com.example.appevecommon.Service.Utilities.Responses.ResponseFactory;
@@ -13,14 +12,9 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-public abstract class BaseController<E extends BaseEntity,
-        D,
-        F extends PagedFilter,
-        M extends BaseMapper<E,D>,
-        S extends AbstractBaseService<E, D,M, F>> {
+
+public abstract class BaseController<E extends BaseEntity,D, F extends PagedFilter, S extends IBaseService<E,D,F>> {
 
     protected final S service;
 
@@ -42,24 +36,8 @@ public abstract class BaseController<E extends BaseEntity,
         return ResponseFactory.noContent();
     }
 
-//    @GetMapping("/all")
-//    public Response<List<D>> getAll() {
-//        return ResponseFactory.ok(service.getAll());
-//    }
-
     @GetMapping
     public PagedResponse<D> getByFilter(@ModelAttribute F filter) {
         return ResponseFactory.ok(service.getByFilter(filter));
     }
-
-
-    //    @PutMapping("/{id}")
-//    public Response<D> update(@PathVariable Long id, @Valid @RequestBody D dto) {
-//        return ResponseFactory.ok("Recurso actualizado exitosamente", service.update(id, dto));
-//    }
-
-    //    @PostMapping
-//    public Response<D> create(@Valid @RequestBody D dto) {
-//        return ResponseFactory.ok("Recurso creado exitosamente", service.create(dto));
-//    }
 }

@@ -1,4 +1,4 @@
-package com.example.appevecommon.Service.Utilities;
+package com.example.appevecommon.Service.Utilities.Responses;
 
 import lombok.Getter;
 import org.springframework.data.domain.PageRequest;

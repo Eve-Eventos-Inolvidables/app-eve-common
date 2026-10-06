@@ -1,17 +1,18 @@
 package com.example.appevecommon.Service;
 
 import com.example.appevecommon.Models.Base.BaseEntity;
-import com.example.appevecommon.Service.Utilities.PagedFilter;
+import com.example.appevecommon.Service.Utilities.Responses.PagedFilter;
 import com.example.appevecommon.Service.Utilities.Responses.Ok.PageResult;
 
 public interface IBaseService<
         E extends BaseEntity,
         D,
+
         F extends PagedFilter>
-{ //D = DTO F = Filter
+{ //D = DTO, UD = UpdateDto, F = Filter
 
     D getById(Long id);
-    E getEntity(Long id) ;
+    E getEntity(Long id);
 
     //SOFT DELETE
     boolean delete(Long id);
