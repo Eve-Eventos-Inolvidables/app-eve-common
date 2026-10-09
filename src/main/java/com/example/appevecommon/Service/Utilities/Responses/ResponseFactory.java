@@ -54,6 +54,9 @@ public final class ResponseFactory {
     }
 
     // ERROR -----------------------------------------------------------------------------
+    public static ResponseEntity<ErrorResponse> badRequest(String errorMessage) {
+        return failure(400, "Mala petición", errorMessage);
+    }
     public static ResponseEntity<ErrorResponse> badRequest(String responseMessage, String errorMessage) {
         return failure(400, responseMessage, errorMessage);
     }
