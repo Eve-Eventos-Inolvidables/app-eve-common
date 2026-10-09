@@ -250,4 +250,5 @@
     <changeSet author="mrfabian (generated)" id="1789167978610-30">
         <addForeignKeyConstraint baseColumnNames="buy_id" baseTableName="tickets" constraintName="fkqh8272g2b5swtkp1eprepffjy" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="buys" validate="true"/>
     </changeSet>
+    <include file="migraciones/001-del-DropGEid.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>
