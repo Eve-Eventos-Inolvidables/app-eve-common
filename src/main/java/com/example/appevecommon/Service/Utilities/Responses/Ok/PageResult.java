@@ -10,7 +10,7 @@ public record PageResult<T>(List<T> items, Pagination pagination) {
         return new PageResult<>(
                 page.getContent(),
                 new Pagination(
-                        page.getNumber(),
+                        page.getNumber() + 1,
                         page.getSize(),
                         page.getTotalElements(),
                         page.getTotalPages()

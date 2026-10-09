@@ -15,7 +15,7 @@ public abstract class PagedFilter {
     private String sort;
 
     public void setPage(int page) {
-        this.page = Math.max(page, 0);
+        this.page = Math.max(page - 1, 0);
     }
 
     public void setSize(int size) {
@@ -31,6 +31,6 @@ public abstract class PagedFilter {
                     ? Sort.Direction.DESC : Sort.Direction.ASC;
             sortable = Sort.by(new Sort.Order(direction, field));
         }
-        return PageRequest.of(page, size, sortable);
+        return PageRequest.of(page , size, sortable);
     }
 }
