@@ -175,10 +175,13 @@
                         <artifactId>liquibase-maven-plugin</artifactId>
                         <version>4.24.0</version>
                         <configuration>
+
+                            <changeLogFile>src/main/resources/db/changelog-master.xml</changeLogFile>
                             <url>${db.url}</url>
                             <username>${db.username}</username>
                             <password>${db.password}</password>
                             <outputChangeLogFile>src/main/resources/db/changelog-master.xml</outputChangeLogFile>
+
                         </configuration>
                     </plugin>
                 </plugins>
