@@ -3,6 +3,7 @@ package com.example.appevecommon.Service;
 import com.example.appevecommon.Models.Base.BaseEntity;
 import com.example.appevecommon.Service.Utilities.Responses.PagedFilter;
 import com.example.appevecommon.Service.Utilities.Responses.Ok.PageResult;
+import jakarta.transaction.Transactional;
 
 public interface IBaseService<
         E extends BaseEntity,

@@ -2,11 +2,9 @@ package com.example.appevecommon.Service;
 
 import com.example.appevecommon.Models.Base.BaseEntity;
 import com.example.appevecommon.Repository.IBaseRepository;
-import com.example.appevecommon.Service.Utilities.MapperBase;
 import com.example.appevecommon.Service.Utilities.ReadableMapper;
 import com.example.appevecommon.Service.Utilities.Responses.PagedFilter;
 import com.example.appevecommon.Service.Utilities.Responses.Ok.PageResult;
-import com.example.appevecommon.Service.Utilities.UpdatableMapper;
 import com.example.appevecommon.Service.Exception.ResourceNotFoundException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -73,6 +71,7 @@ public abstract class AbstractBaseService<
 //    }
 
     @Override
+    @Transactional
     public boolean delete(Long id) {
         if (!repository.existsById(id)) {
             return false;

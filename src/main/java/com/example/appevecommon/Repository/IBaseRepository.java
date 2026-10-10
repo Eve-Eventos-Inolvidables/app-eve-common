@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,10 +20,12 @@ public interface IBaseRepository<X extends BaseEntity> extends JpaRepository<X,L
 
     //SOFT DELETE, native queries to ignore archived = true from the SQLRestriction in BaseEntity
     @Modifying
+    @Transactional
     @Query(value = "UPDATE #{#entityName} SET is_archived = true WHERE id = :id", nativeQuery = true)
     void archive(@Param("id") Long id);
 
     @Modifying
+    @Transactional
     @Query(value = "UPDATE #{#entityName} SET is_archived = false WHERE id = :id", nativeQuery = true)
     void unarchive(@Param("id") Long id);
 
