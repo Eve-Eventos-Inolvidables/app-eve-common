@@ -184,6 +184,8 @@ components:
         roleId:
           type: integer
           format: int64
+        roleName:
+          type: string
         name:
           type: string
           maxLength: 125
@@ -505,9 +507,7 @@ components:
         eventId:
           type: integer
           format: int64
-        assignedAt:
-          type: string
-          format: date
+
 
     CreateEventManagerDto:
       allOf:
@@ -516,12 +516,18 @@ components:
           required:
             - managerId
             - eventId
-            - assignedAt
+
 
     EventManagerDto:
       allOf:
-        - $ref: '#/components/schemas/ArchivableDto'
         - $ref: '#/components/schemas/EventManagerBaseDto'
+        - $ref: '#/components/schemas/ArchivableDto'
+        - type: object
+          properties:
+            assignedAt:
+              type: string
+              format: date
+
 
     # --- INTERESES DEL USUARIO (tabla intermedia) ---
 
