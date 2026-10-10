@@ -254,5 +254,6 @@
     <include file="migraciones/002-drop-groupevent.sql" relativeToChangelogFile="true"/>
     <include file="migraciones/003-add-col-isarchived-roles.sql" relativeToChangelogFile="true"/>
     <include file="migraciones/004-drop-column-isarchived-buys.sql" relativeToChangelogFile="true"/>
+    <include file="migraciones/005-add-col-isarchived-3tab.sql" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
