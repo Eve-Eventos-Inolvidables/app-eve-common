@@ -47,6 +47,10 @@ public final class ResponseFactory {
         return ok("Recurso creado correctamente", data);
     }
 
+    public static <T> Response<T> resourceCreated(String message,T data) {
+        return ok(message, data);
+    }
+
     // 204 ------------------------------------------------------------------------------
 
     public static ResponseEntity<Void> noContent() {

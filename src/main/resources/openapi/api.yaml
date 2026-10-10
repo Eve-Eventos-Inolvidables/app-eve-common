@@ -184,8 +184,6 @@ components:
         roleId:
           type: integer
           format: int64
-        roleName:
-          type: string
         name:
           type: string
           maxLength: 125
@@ -193,7 +191,6 @@ components:
           type: string
           format: email
           maxLength: 150
-
 
     CreateUserDto:
       allOf:
@@ -224,6 +221,10 @@ components:
       allOf:
         - $ref: '#/components/schemas/ArchivableDto'
         - $ref: '#/components/schemas/UserBaseDto'
+        - type: object
+          properties:
+            roleName:
+              type: string
 
     #Full user
     FullUserDto:
