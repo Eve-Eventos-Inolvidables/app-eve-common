@@ -6,19 +6,7 @@ import com.example.appevecommon.Service.Utilities.Responses.Ok.PageResult;
 import com.example.appevecommon.Service.Utilities.Responses.Ok.PagedResponse;
 import org.springframework.http.ResponseEntity;
 
-/**
- * Constructor de envelopes. Hay un metodo por forma de respuesta, no un metodo generico
- * con flags: asi el tipo de retorno de cada endpoint declara su forma y su schema solo
- * muestra los campos que ese endpoint manda.
- * <p>
- * Los metodos {@code ok} devuelven el envelope pelado porque el status no se elige: es 200.
- * Los metodos de error devuelven {@link ResponseEntity} porque si hay un status que fijar, y
- * fijarlo en la misma llamada que arma el body es lo que garantiza que
- * {@link ErrorDetail#statusCode()} y el status HTTP nunca se contradigan.
- * <p>
- * Para un status de exito que no tiene metodo (201, 202), no agregues uno: usar
- * {@code ResponseEntity.status(201).body(ResponseFactory.ok(dto))}.
- */
+
 public final class ResponseFactory {
     private static final String DEFAULT_SUCCESS_MESSAGE = "Operación exitosa";
     private static final int DEFAULT_ERROR_STATUS = 500;
@@ -35,10 +23,6 @@ public final class ResponseFactory {
         return new Response<>(true, message, data);
     }
 
-    /**
-     * Aplana el {@link PageResult} del service: los items van a {@code data} y la
-     * {@link Pagination} sube al nivel superior del envelope.
-     */
     public static <T> PagedResponse<T> ok(PageResult<T> page) {
         return new PagedResponse<>(true, DEFAULT_SUCCESS_MESSAGE, page.items(), page.pagination());
     }

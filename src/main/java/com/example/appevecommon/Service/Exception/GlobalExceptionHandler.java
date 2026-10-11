@@ -24,8 +24,8 @@ public class GlobalExceptionHandler {
             "violates unique constraint", "Ya existe un registro con los mismos datos únicos.",
             "duplicate key", "Ya existe un registro con los mismos datos únicos.",
             "violates foreign key constraint", "La operación no se puede realizar porque depende de un registro que no existe o está en uso.",
-            "violates not-null constraint", "No se enviaron todos los campos obligatorios requeridos por la base de datos.",
-            "null value in column", "No se enviaron todos los campos obligatorios requeridos por la base de datos."
+            "violates not-null constraint", "No se enviaron todos los campos obligatorios .",
+            "null value in column", "No se enviaron todos los campos obligatorios."
     );
 
     @ExceptionHandler(ResourceNotFoundException.class)
@@ -60,22 +60,21 @@ public class GlobalExceptionHandler {
         String rootMessage = ex.getMostSpecificCause().getMessage();
 
         String detailMessage = (rootMessage == null)
-                ? "Error de integridad de datos en la base de datos"
+                ? "Error de integridad de datos "
 
                 : DB_ERROR_DICTIONARY.entrySet().stream()
                 .filter(entry -> rootMessage.contains(entry.getKey()))
                 .map(Map.Entry::getValue)
                 .findFirst()
-                .orElse("Error de integridad de datos en la base de datos");
+                .orElse("Error de integridad de datos ");
 
         return ResponseFactory.badRequest(detailMessage);
     }
 
-    // El mensaje se expone a proposito: en desarrollo es lo que sirve para debugear.
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneric(Exception ex) {
-        log.error("Error no manejado", ex);
-        return ResponseFactory.error("Error interno del servidor", ex.getMessage());
+        log.error(ex.getMessage());
+        return ResponseFactory.error("Error interno del servidor",null);
     }
 }

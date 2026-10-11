@@ -7,20 +7,32 @@ import com.example.appevecommon.Service.Utilities.Responses.PagedFilter;
 import com.example.appevecommon.Service.Utilities.Responses.Ok.PagedResponse;
 import com.example.appevecommon.Service.Utilities.Responses.Response;
 import com.example.appevecommon.Service.Utilities.Responses.ResponseFactory;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.ResolvableType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 
-
+@Slf4j
 public abstract class BaseController<E extends BaseEntity,D, F extends PagedFilter, S extends IBaseService<E,D,F>> {
 
     protected final S service;
+    protected final String entityName;
 
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
+    @SuppressWarnings("unchecked")
     protected BaseController(S service) {
         this.service = service;
+
+        //To get the entity name
+        Class<E> entityClass = (Class<E>) ResolvableType
+                .forClass(getClass())
+                .as(BaseController.class)
+                .getGeneric(0)
+                .resolve();
+
+        this.entityName = (entityClass != null) ? entityClass.getSimpleName() : "Entidad";
     }
 
     @GetMapping("/{id}")
@@ -33,6 +45,7 @@ public abstract class BaseController<E extends BaseEntity,D, F extends PagedFilt
         if (!service.delete(id)) {
             throw new ResourceNotFoundException(id);
         }
+        log.info("Se eliminó el objeto {} con id: {}", entityName, id);
         return ResponseFactory.noContent();
     }
 

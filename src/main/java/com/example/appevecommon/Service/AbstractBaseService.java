@@ -33,18 +33,6 @@ public abstract class AbstractBaseService<
 
     public abstract Specification<E> toSpecification(F filter);
 
-    /**
-     * Loads the entity, applies the changes and saves it.
-     * Used by update() so untouched columns (id, archived, and any other
-     * server-owned field) keep their current values. NEVER rebuild the entity
-     * with toEntity() inside an update: that is a full replace and resets them.
-     */
-    protected E patch(Long id, Consumer<E> changes) {
-        E entity = getEntity(id);
-        changes.accept(entity);
-        return repository.save(entity);
-    }
-
     @Override
     public E getEntity(Long id) {
         return repository.findById(id)
@@ -55,20 +43,6 @@ public abstract class AbstractBaseService<
     public D getById(Long id) {
         return mapper.toDto(getEntity(id));
     }
-//
-//    /**
-//     * PATCH: carga la entidad, le aplica el {@code UD} encima y la persiste. El
-//     * {@code toDto} final es sobre la entidad ya guardada, no sobre el retorno del mapper:
-//     * asi el DTO que se responde refleja defaults o columnas que haya calculado la base.
-//     * <p>
-//     * Va transaccional porque {@code patch()} lee y escribe en dos statements sueltos; sin
-//     * la transaccion, dos updates concurrentes sobre la misma fila se pisan.
-//     */
-//    @Override
-//    @Transactional
-//    public D update(Long id, UD updateDto) {
-//        return mapper.toDto(patch(id, entity -> mapper.updateEntityFromDto(updateDto, entity)));
-//    }
 
     @Override
     @Transactional
