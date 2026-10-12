@@ -426,6 +426,28 @@ components:
       allOf:
         - $ref: '#/components/schemas/ArchivableDto'
         - $ref: '#/components/schemas/SectorByBatchBaseDto'
+    # EventCreat para Transacción DTO
+    CreateEventTransDto:
+      allOf:
+        - $ref: '#/components/schemas/CreateSimpleEventDto'
+        - type: object
+          required:
+            - sectores
+            - tandas
+            - precios
+          properties:
+            sectores:
+              type: array
+              items:
+                $ref: '#/components/schemas/CreateSectorDto'
+            tandas:
+              type: array
+              items:
+                $ref: '#/components/schemas/CreateBatchDto'
+            precios:
+              type: array
+              items:
+                $ref: '#/components/schemas/CreateSectorByBatchDto'
 
     # --- COMPRAS ---
     # total y date los calcula el backend, por eso no van en Create
