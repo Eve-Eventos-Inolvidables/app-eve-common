@@ -26,7 +26,6 @@ public abstract class UpdatableService
         return repository.save(entity);
     }
     public D update(Long id, UD updateDto) {
-        log.debug("Actualizando entidad con id {} | cuerpo {} ",id,updateDto.toString());
         return mapper.toDto(patch(id, entity -> mapper.updateEntityFromDto(updateDto, entity)));
     }
 }
