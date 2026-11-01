@@ -21,7 +21,7 @@ public abstract class AbstractBaseService<
         F extends PagedFilter>
         implements IBaseService<E, D,  F> {
 
-    private static final int DEFAULT_SIZE = 20;
+    protected static final int DEFAULT_SIZE = 20;
 
     protected final IBaseRepository<E> repository;
     protected final M mapper;
