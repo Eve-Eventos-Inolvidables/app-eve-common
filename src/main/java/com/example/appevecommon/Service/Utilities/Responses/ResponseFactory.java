@@ -4,6 +4,7 @@ import com.example.appevecommon.Service.Utilities.Responses.Error.ErrorDetail;
 import com.example.appevecommon.Service.Utilities.Responses.Error.ErrorResponse;
 import com.example.appevecommon.Service.Utilities.Responses.Ok.PageResult;
 import com.example.appevecommon.Service.Utilities.Responses.Ok.PagedResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 
@@ -43,18 +44,18 @@ public final class ResponseFactory {
 
     // ERROR -----------------------------------------------------------------------------
     public static ResponseEntity<ErrorResponse> badRequest(String errorMessage) {
-        return failure(400, "Mala petición", errorMessage);
+        return failure(HttpStatus.BAD_REQUEST.value(), "Mala petición", errorMessage);
     }
     public static ResponseEntity<ErrorResponse> badRequest(String responseMessage, String errorMessage) {
-        return failure(400, responseMessage, errorMessage);
+        return failure(HttpStatus.BAD_REQUEST.value(), responseMessage, errorMessage);
     }
 
     public static ResponseEntity<ErrorResponse> unauthorized() {
-        return failure(401, "No autorizado", "No está autorizado para esta acción");
+        return failure(HttpStatus.UNAUTHORIZED.value(), "No autorizado", "No está autorizado para esta acción");
     }
 
     public static ResponseEntity<ErrorResponse> notFound(String errorMessage) {
-        return failure(404, "Recurso no encontrado", errorMessage);
+        return failure(HttpStatus.NOT_FOUND.value(), "Recurso no encontrado", errorMessage);
     }
 
     public static ResponseEntity<ErrorResponse> error(String responseMessage, String errorMessage) {

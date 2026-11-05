@@ -6,6 +6,7 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
+import org.springframework.security.authorization.AuthorizationDeniedException;
+import org.springframework.security.access.AccessDeniedException;
 
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -77,13 +80,17 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<ErrorResponse> handleMethodNotSupported(HttpRequestMethodNotSupportedException ex){
-        return ResponseFactory.error(405,"Metodo no disponible",null);
+        return ResponseFactory.error(HttpStatus.METHOD_NOT_ALLOWED.value(), "Metodo no disponible",null);
+    }
+    @ExceptionHandler({AccessDeniedException.class, AuthorizationDeniedException.class})
+    public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException ex) {
+        return ResponseFactory.error(HttpStatus.FORBIDDEN.value(),"Permisos insuficientes para realizar esta acción" ,null);
     }
 
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneric(Exception ex) {
-        log.error(ex.getMessage());
+        log.error(ex.getMessage(),ex);
         return ResponseFactory.error("Error interno del servidor",null);
     }
 }
