@@ -181,11 +181,13 @@ Para no repetir esa conversión a mano, `MapperBase` trae `formatTime`/`parseTim
 | `id; DROP TABLE ...` | Campo inexistente → 500 (ver más abajo) |
 
 ```http
-GET /api/event-categories?page=0&size=20&sort=name+asc
-GET /api/event-categories?page=0&size=20&sort=name,desc
+GET /api/event-categories?page=1&size=20&sort=name+asc
+GET /api/event-categories?page=1&size=20&sort=name,desc
 ```
 
 Dos cosas a tener en cuenta: `sort` **no se valida contra una whitelist**, así que un campo inexistente lanza `PropertyReferenceException`, que el `GlobalExceptionHandler` mapea a **500** y no a 400. Y como no hay segundo criterio de desempate, conviene paginar con `sort=id desc`.
+
+**La paginación es base 1:** la primera página es `page=1` y el `pagination.page` de la respuesta repite ese número. `page=0` se acepta como alias de la primera página por compatibilidad, y `size` se recorta a `1..100` (default `20`).
 
 ## 9. El envelope de respuesta
 
@@ -202,8 +204,8 @@ Los controllers no devuelven el DTO pelado: devuelven un envelope. Hay **un tipo
 // GET /api/event-categories/1
 {"success":true,"message":"Operación exitosa","data":{"id":1,"name":"Rock","archived":false}}
 
-// GET /api/event-categories?page=0&size=20&sort=name+asc
-{"success":true,"message":"Operación exitosa","data":[...],"pagination":{"page":0,"size":20,"totalItems":100,"totalPages":5}}
+// GET /api/event-categories?page=1&size=20&sort=name+asc
+{"success":true,"message":"Operación exitosa","data":[...],"pagination":{"page":1,"size":20,"totalItems":100,"totalPages":5}}
 
 // 404
 {"success":false,"message":"Recurso no encontrado","error":{"statusCode":404,"message":"No existe EventCategory con id=99"}}

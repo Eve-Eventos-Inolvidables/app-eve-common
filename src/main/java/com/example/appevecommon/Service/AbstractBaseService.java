@@ -21,7 +21,7 @@ public abstract class AbstractBaseService<
         F extends PagedFilter>
         implements IBaseService<E, D,  F> {
 
-    protected static final int DEFAULT_SIZE = 20;
+    protected static final int DEFAULT_SIZE = PagedFilter.DEFAULT_SIZE;
 
     protected final IBaseRepository<E> repository;
     protected final M mapper;
@@ -62,6 +62,7 @@ public abstract class AbstractBaseService<
     @Override
     public PageResult<D> getByFilter(F filter) {
         Pageable pageable = (filter != null) ? filter.toPageable() : PageRequest.of(0, DEFAULT_SIZE);
-        return PageResult.from(repository.findAll(toSpecification(filter), pageable).map(mapper::toDto));
+        Specification<E> specification = (filter != null) ? toSpecification(filter) : (root, query, cb) -> cb.conjunction();
+        return PageResult.from(repository.findAll(specification, pageable).map(mapper::toDto));
     }
 }

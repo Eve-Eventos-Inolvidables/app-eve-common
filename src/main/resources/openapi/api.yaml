@@ -131,8 +131,10 @@ components:
       properties:
         page:
           type: integer
-          description: Indice de pagina, base 0 (el mismo `page` que se manda como query param).
-          example: 0
+          description: >-
+            Indice de pagina, base 1: la primera pagina es 1. El query param `page=0`
+            se acepta como alias de la primera pagina por compatibilidad.
+          example: 1
         size:
           type: integer
           example: 20
