@@ -474,7 +474,18 @@ components:
           required:
             - eventId
             - userId
-
+            - sectorByBatchIds
+          properties:
+            sectorByBatchIds:
+              type: array
+              minItems: 1
+              description: >-
+                IDs de SectorByBatch seleccionados. Cada elemento representa
+                un ticket; IDs repetidos indican varios tickets del mismo sector y tanda.
+              items:
+                type: integer
+                format: int64
+                minimum: 1
     BuyDto:
       allOf:
         - $ref: '#/components/schemas/ArchivableDto'
