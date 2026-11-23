@@ -9,5 +9,4 @@ import org.springframework.context.annotation.PropertySource;
 @EntityScan(basePackages = "com.example.appevecommon.Models")
 @ComponentScan(basePackages = "com.example.appevecommon.Service.Exception")
 @PropertySource(value = "classpath:eve-common-defaults.properties", ignoreResourceNotFound = true)
-public class EveCommonAutoConfiguration {
-}
+public class EveCommonAutoConfiguration {}
