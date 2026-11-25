@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.example</groupId>
     <artifactId>app-eve-common</artifactId>
-    <version>0.6.1</version>
+    <version>0.7.0</version>
     <name>app-eve-common</name>
     <description>app-eve-common</description>
     <url/>
@@ -97,7 +97,10 @@
             <artifactId>spring-boot-starter-data-jpa-test</artifactId>
             <scope>test</scope>
         </dependency>
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
